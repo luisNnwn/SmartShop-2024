@@ -35,10 +35,8 @@ if(isset($_GET['delete_all'])){
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Wishlist</title>
    
-   <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
-   <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -85,7 +83,7 @@ if(isset($_GET['delete_all'])){
    </div>
 
    <div class="wishlist-total">
-      <p>Grand Total : <span>Nrs.<?= $grand_total; ?>/-</span></p>
+      <p>Total general :<span>$<?= $grand_total; ?>/-</span></p>
       <a href="shop.php" class="option-btn">Continuar comprando</a>
       <a href="wishlist.php?delete_all" class="delete-btn <?= ($grand_total > 1)?'':'disabled'; ?>" onclick="return confirm('¿borrar todo de la lista de favoritos?');">borrar todos los elementos</a>
    </div>

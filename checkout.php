@@ -37,9 +37,9 @@ if(isset($_POST['order'])){
       $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
       $delete_cart->execute([$user_id]);
 
-      $message[] = 'order placed successfully!';
+      $message[] = '¡pedido realizado con éxito!';
    }else{
-      $message[] = 'your cart is empty';
+      $message[] = 'su carrito está vacío';
    }
 
 }
@@ -54,10 +54,8 @@ if(isset($_POST['order'])){
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>checkout</title>
    
-   <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
-   <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -92,7 +90,7 @@ if(isset($_POST['order'])){
       ?>
          <input type="hidden" name="total_products" value="<?= $total_products; ?>">
          <input type="hidden" name="total_price" value="<?= $grand_total; ?>" value="">
-         <div class="grand-total">Grand Total : <span>Nrs.<?= $grand_total; ?>/-</span></div>
+         <div class="grand-total">Total general: <span>$<?= $grand_total; ?>/-</span></div>
       </div>
 
       <h3>place your orders</h3>
@@ -103,44 +101,44 @@ if(isset($_POST['order'])){
             <input type="text" name="name" placeholder="enter your name" class="box" maxlength="20" required>
          </div>
          <div class="inputBox">
-            <span>Your Number :</span>
+            <span>Su número :</span>
             <input type="number" name="number" placeholder="enter your number" class="box" min="0" max="9999999999" onkeypress="if(this.value.length == 10) return false;" required>
          </div>
          <div class="inputBox">
-            <span>Your Email :</span>
+            <span>Su correo electrónico :</span>
             <input type="email" name="email" placeholder="enter your email" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
             <span>kasari halnuhunx paisa? :</span>
             <select name="method" class="box" required>
-               <option value="cash on delivery">Cash On Delivery</option>
-               <option value="credit card">Credit Card</option>
+               <option value="cash on delivery">Pago contra entrega</option>
+               <option value="credit card">Tarjeta de crédito</option>
                <option value="paytm">eSewa</option>
-               <option value="paypal">Khalti</option>
+               <option value="paypal">PayPal</option>
             </select>
          </div>
          <div class="inputBox">
-            <span>Address line 01 :</span>
+            <span>Dirección línea 01 :</span>
             <input type="text" name="flat" placeholder="e.g. Flat number" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>Address line 02 :</span>
+            <span>Dirección línea 02 :</span>
             <input type="text" name="street" placeholder="Street name" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>City :</span>
+            <span>Ciudad :</span>
             <input type="text" name="city" placeholder="Kathmandu" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>Province:</span>
+            <span>Provincia :</span>
             <input type="text" name="state" placeholder="Bagmati" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>Country :</span>
+            <span>País :</span>
             <input type="text" name="country" placeholder="Nepal" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>ZIP CODE :</span>
+            <span>CÓDIGO POSTAL :</span>
             <input type="number" min="0" name="pin_code" placeholder="e.g. 56400" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
          </div>
       </div>

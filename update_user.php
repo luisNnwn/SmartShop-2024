@@ -30,18 +30,18 @@ if(isset($_POST['submit'])){
    $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
 
    if($old_pass == $empty_pass){
-      $message[] = 'please enter old password!';
+      $message[] = '¡por favor, introduzca su antigua contraseña!';
    }elseif($old_pass != $prev_pass){
-      $message[] = 'old password not matched!';
+      $message[] = '¡contraseña antigua no coincide!';
    }elseif($new_pass != $cpass){
-      $message[] = 'confirm password not matched!';
+      $message[] = '¡confirmar contraseña no coincide!';
    }else{
       if($new_pass != $empty_pass){
          $update_admin_pass = $conn->prepare("UPDATE `users` SET password = ? WHERE id = ?");
          $update_admin_pass->execute([$cpass, $user_id]);
-         $message[] = 'password updated successfully!';
+         $message[] = '¡contraseña actualizada correctamente!';
       }else{
-         $message[] = 'please enter a new password!';
+         $message[] = '¡por favor, introduzca una nueva contraseña!';
       }
    }
    
@@ -57,10 +57,8 @@ if(isset($_POST['submit'])){
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Register</title>
    
-   <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
-   <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
 </head>

@@ -20,10 +20,8 @@ if(isset($_SESSION['user_id'])){
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Pedidos</title>
    
-   <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
-   <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -47,15 +45,15 @@ if(isset($_SESSION['user_id'])){
             while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
    ?>
    <div class="box">
-      <p>Placed on : <span><?= $fetch_orders['placed_on']; ?></span></p>
-      <p>Name : <span><?= $fetch_orders['name']; ?></span></p>
-      <p>Email : <span><?= $fetch_orders['email']; ?></span></p>
-      <p>Phone Number : <span><?= $fetch_orders['number']; ?></span></p>
-      <p>Address : <span><?= $fetch_orders['address']; ?></span></p>
-      <p>Payment Method : <span><?= $fetch_orders['method']; ?></span></p>
-      <p>Your orders : <span><?= $fetch_orders['total_products']; ?></span></p>
-      <p>Total price : <span>Nrs.<?= $fetch_orders['total_price']; ?>/-</span></p>
-      <p> Payment status : <span style="color:<?php if($fetch_orders['payment_status'] == 'pending'){ echo 'red'; }else{ echo 'green'; }; ?>"><?= $fetch_orders['payment_status']; ?></span> </p>
+      <p>Colocado en :<span><?= $fetch_orders['placed_on']; ?></span></p>
+      <p>Nombre : <span><?= $fetch_orders['name']; ?></span></p>
+      <p>Correo electrónico : <span><?= $fetch_orders['email']; ?></span></p>
+      <p>Número de teléfono :<span><?= $fetch_orders['number']; ?></span></p>
+      <p>Dirección :<span><?= $fetch_orders['address']; ?></span></p>
+      <p>Forma de pago :<span><?= $fetch_orders['method']; ?></span></p>
+      <p>Sus pedidos :<span><?= $fetch_orders['total_products']; ?></span></p>
+      <p>Precio total :<span>Nrs.<?= $fetch_orders['total_price']; ?>/-</span></p>
+      <p>Estado del pago : <span style="color:<?php if($fetch_orders['payment_status'] == 'pending'){ echo 'red'; }else{ echo 'green'; }; ?>"><?= $fetch_orders['payment_status']; ?></span> </p>
    </div>
    <?php
       }

@@ -53,7 +53,7 @@ if(isset($_SESSION['user_id'])){
 
 <section class="reviews">
    
-   <h1 class="heading">Client's Reviews.</h1>
+   <h1 class="heading">Reseñas de los clientes.</h1>
 
    <div class="swiper reviews-slider">
 
@@ -61,7 +61,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-5.jpg" alt="">
-         <p>Been using their services for quite a bit and have never had an issue with the quality of their products. Online e-products working great as well. Only issue I have is they usually deliver when I'm a little caught up, though I've set a preferred delivery time. Everything else has been good.</p>
+         <p>Llevo bastante tiempo utilizando sus servicios y nunca he tenido ningún problema con la calidad de sus productos. Los productos electrónicos en línea también funcionan muy bien. El único problema que tengo es que suelen entregar cuando estoy un poco ocupado, aunque he establecido una hora de entrega preferente. Todo lo demás ha ido bien.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -74,7 +74,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-1.jpg" alt="">
-         <p>It is the first online services in Nepal which we can trust completely.I always unbox making a video and instantly complain if there's anything wrong. Sometimes even don't need to return the item and they process the refund. KinBech do heavy fine to sellers who send wrong products thats why its platform getting better day by day.</p>
+         <p>Siempre hago un unboxing haciendo un vídeo y reclamo al instante si hay algo mal. A veces ni siquiera es necesario devolver el artículo y ellos tramitan el reembolso. SmartShop penaliza mucho a los vendedores que envían productos erróneos, por eso su plataforma mejora cada día.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -87,7 +87,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-3.jpg" alt="">
-         <p>KinBech is great if you choose good sellers . A variety of required item available . Customers can return and refund full amount within 7 days easily . KinBech is boosting eCommerce business in Kathmandu.It provides great opportunity to sale items online with ease.</p>
+         <p>SmartShop es grande si usted elige buenos vendedores . Una variedad de artículo requerido disponible. Los clientes pueden devolver y reembolsar el importe total en 7 días fácilmente. SmartShop está impulsando el comercio electrónico en El Salvador y ofrece una gran oportunidad para vender artículos en línea con facilidad.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -100,7 +100,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-7.jpg" alt="">
-         <p>Using KinBech for online shopping from almost 3 years. Outstanding experience with them. Game vouchers and pick up point as delivery with 0 shipping charges are super saving services.</p>
+         <p>Uso SmartShop para compras en línea desde hace casi 3 años. Excelente experiencia con ellos. Los vales de juego y el punto de recogida como entrega con 0 gastos de envío son servicios súper ahorradores.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -113,7 +113,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-2.jpg" alt="">
-         <p>I have been using their services for the last 2 years and I have found them extremely reliable.Their return policy is what gives you an extra layer of reliance and peace of mind. In case the product doesn't meet your expectations or if there is any fault in it. then you can return the product within seven days from the date of delivery.</p>
+         <p>Llevo dos años utilizando sus servicios y me han parecido muy fiables. Su política de devoluciones es lo que te da más confianza y tranquilidad. Si el producto no cumple tus expectativas o tiene algún defecto, puedes devolverlo en un plazo de siete días a partir de la fecha de entrega.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -126,7 +126,7 @@ if(isset($_SESSION['user_id'])){
 
       <div class="swiper-slide slide">
          <img src="images/pic-6.jpg" alt="">
-         <p>KinBech is cool! I have ordered hundreds of products from it and never got any scam. It delivers products in time with out delay. Packaging of products are strong and delivery rates are too low. Just amazing Website will keep shopping from KinBech.</p>
+         <p>¡SmartShop es genial! He pedido cientos de productos y nunca me han estafado. Entrega los productos a tiempo y sin retrasos. El embalaje de los productos es fuerte y las tasas de entrega son demasiado bajas. El sitio web es increíble y seguiré comprando en SmartShop.</p>
          <div class="stars">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
