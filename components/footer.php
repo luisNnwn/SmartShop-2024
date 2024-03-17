@@ -22,7 +22,7 @@
          <h3>Contáctanos.</h3>
          <a href="tel:9800000000"><i class="fas fa-phone"></i> +503 78164658</a>
          <a href="tel:9900000000"><i class="fas fa-phone"></i> +503 61257890</a>
-         <a href="mailto:harshchy143@gmail.com"><i class="fas fa-envelope"></i> smartshop@gmail.com</a>
+         <a href="mailto:harshchy143@gmail.com"><i class="fas fa-envelope"></i> smartshopsv24@gmail.com</a>
          <a href="https://www.google.com/myplace"><i class="fas fa-map-marker-alt"></i> San Salvador, El Salvador </a>
       </div>
 
