@@ -69,7 +69,7 @@ if(isset($_SESSION['user_id'])){
    <?php
       echo '<style>';
       echo '.box-container {';
-      echo '    margin-top: 50px; /* Ajusta el margen superior según sea necesario */';
+      echo '    margin-top: 50px;';
       echo '    display: flex;';
       echo '    justify-content: center;';
       echo '    align-items: center;';
@@ -85,7 +85,7 @@ if(isset($_SESSION['user_id'])){
       echo '    text-decoration: none;';
       echo '    border-radius: 5px;';
       echo '    margin-right: 10px;';
-      echo '    font-size: 16px; /* Tamaño de la letra */';
+      echo '    font-size: 16px;';
       echo '}';
       echo '.download-btn:hover {';
       echo '    background-color: #45a049;';
