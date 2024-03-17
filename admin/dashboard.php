@@ -52,7 +52,7 @@ if(!isset($admin_id)){
                }
             }
          ?>
-         <h3><span>Nrs.</span><?= $total_pendings; ?><span>/-</span></h3>
+         <h3><span>$</span><?= $total_pendings; ?><span>/-</span></h3>
          <p>Total pendientes</p>
          <a href="placed_orders.php" class="btn">Ver pedidos</a>
       </div>
@@ -68,7 +68,7 @@ if(!isset($admin_id)){
                }
             }
          ?>
-         <h3><span>Nrs.</span><?= $total_completes; ?><span>/-</span></h3>
+         <h3><span>$</span><?= $total_completes; ?><span>/-</span></h3>
          <p>Pedidos completados</p>
          <a href="placed_orders.php" class="btn">Ver pedidos</a>
       </div>

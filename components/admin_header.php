@@ -21,7 +21,7 @@
          <a href="../admin/dashboard.php">Inicio</a>
          <a href="../admin/products.php">Productos</a>
          <a href="../admin/placed_orders.php">Pedidos</a>
-         <a href="../admin/admin_accounts.php">Admins</a>
+         <a href="../admin/admin_accounts.php">Administradores</a>
          <a href="../admin/users_accounts.php">Usuarios</a>
          <a href="../admin/messages.php">Mensajes</a>
       </nav>
@@ -43,7 +43,7 @@
             <a href="../admin/register_admin.php" class="option-btn">Registrarse</a>
             <a href="../admin/admin_login.php" class="option-btn">Iniciar sesión</a>
          </div>
-         <a href="../components/admin_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">cerrar sesión</a> 
+         <a href="../components/admin_logout.php" class="delete-btn" onclick="return confirm('¿Cerrar sesión en el sitio web?');">cerrar sesión</a> 
       </div>
 
    </section>

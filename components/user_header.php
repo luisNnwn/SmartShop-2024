@@ -50,10 +50,10 @@
             $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
          ?>
          <p><?= $fetch_profile["name"]; ?></p>
-         <a href="update_user.php" class="btn">Actualizar perfil.</a>
+         <a href="update_user.php" class="btn">Actualizar perfil</a>
          <div class="flex-btn">
-            <a href="user_register.php" class="option-btn">Registrarse.</a>
-            <a href="user_login.php" class="option-btn">Iniciar sesión.</a>
+            <a href="user_register.php" class="option-btn">Registrarse</a>
+            <a href="user_login.php" class="option-btn">Iniciar sesión</a>
          </div>
          <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">Cerrar sesión</a> 
          <?php

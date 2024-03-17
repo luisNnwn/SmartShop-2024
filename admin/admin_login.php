@@ -19,7 +19,7 @@ if(isset($_POST['submit'])){
       $_SESSION['admin_id'] = $row['id'];
       header('location:dashboard.php');
    }else{
-      $message[] = 'incorrect username or password!';
+      $message[] = '¡nombre de usuario o contraseña incorrectos!';
    }
 
 }
