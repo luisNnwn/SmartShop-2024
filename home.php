@@ -102,7 +102,7 @@ include 'components/wishlist_cart.php';
       <h3>Televisión</h3>
    </a>
 
-   <a href="category.php?category=camera" class="swiper-slide slide">
+   <a href="category.php?category=camara" class="swiper-slide slide">
       <img src="images/icon-3.png" alt="">
       <h3>Cámaras</h3>
    </a>
@@ -112,25 +112,25 @@ include 'components/wishlist_cart.php';
       <h3>Mouse</h3>
    </a>
 
-   <a href="category.php?category=fridge" class="swiper-slide slide">
+   <a href="category.php?category=refrigeradora" class="swiper-slide slide">
       <img src="images/icon-5.png" alt="">
       <h3>Refrigeradoras</h3>
    </a>
 
-   <a href="category.php?category=washing" class="swiper-slide slide">
+   <a href="category.php?category=lavadora" class="swiper-slide slide">
       <img src="images/icon-6.png" alt="">
       <h3>Lavadoras</h3>
    </a>
 
-   <a href="category.php?category=smartphone" class="swiper-slide slide">
+   <a href="category.php?category=Xiaomi" class="swiper-slide slide">
       <img src="images/icon-7.png" alt="">
       <h3>Smartphones</h3>
    </a>
 
-   <a href="category.php?category=watch" class="swiper-slide slide">
-      <img src="images/icon-8.png" alt="">
-      <h3>Relojes</h3>
-   </a>
+   <a href="category.php?category=reloj" class="swiper-slide slide">
+   <img src="images/icon-8.png" alt="">
+   <h3>Relojes</h3>
+</a>
 
    </div>
 

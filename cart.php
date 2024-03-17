@@ -29,7 +29,7 @@ if(isset($_POST['update_qty'])){
    $qty = filter_var($qty, FILTER_SANITIZE_STRING);
    $update_qty = $conn->prepare("UPDATE `cart` SET quantity = ? WHERE id = ?");
    $update_qty->execute([$qty, $cart_id]);
-   $message[] = 'cart quantity updated';
+   $message[] = 'cantidad del carrito actualizada';
 }
 
 ?>
@@ -40,7 +40,7 @@ if(isset($_POST['update_qty'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Shopping Cart</title>
+   <title>Carrito de compras</title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
@@ -75,7 +75,7 @@ if(isset($_POST['update_qty'])){
          <button type="submit" class="fas fa-edit" name="update_qty"></button>
       </div>
       <div class="sub-total"> Sub Total : <span>$<?= $sub_total = ($fetch_cart['price'] * $fetch_cart['quantity']); ?></span> </div>
-      <input type="submit" value="delete item" onclick="return confirm('delete this from cart?');" class="delete-btn" name="delete">
+      <input type="submit" value="eliminar producto" onclick="return confirm('¿borrarlo del carrito?');" class="delete-btn" name="delete">
    </form>
    <?php
    $grand_total += $sub_total;
@@ -89,7 +89,7 @@ if(isset($_POST['update_qty'])){
    <div class="cart-total">
       <p>Total general :<span>$<?= $grand_total; ?></span></p>
       <a href="shop.php" class="option-btn">Continuar comprando</a>
-      <a href="cart.php?delete_all" class="delete-btn <?= ($grand_total > 1)?'':'disabled'; ?>" onclick="return confirm('delete all from cart?');">¿Borrar todos los elementos?</a>
+      <a href="cart.php?delete_all" class="delete-btn <?= ($grand_total > 1)?'':'disabled'; ?>" onclick="return confirm('¿eliminar todo del carrito?');">¿Borrar todos los elementos?</a>
       <a href="checkout.php" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>">Proceda a la compra</a>
    </div>
 

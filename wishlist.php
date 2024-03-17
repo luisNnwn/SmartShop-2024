@@ -68,7 +68,7 @@ if(isset($_GET['delete_all'])){
       <img src="uploaded_img/<?= $fetch_wishlist['image']; ?>" alt="">
       <div class="name"><?= $fetch_wishlist['name']; ?></div>
       <div class="flex">
-         <div class="price">Nrs.<?= $fetch_wishlist['price']; ?>/-</div>
+         <div class="price">$<?= $fetch_wishlist['price']; ?></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
       <input type="submit" value="añadir al carrito" class="btn" name="add_to_cart">
@@ -83,7 +83,7 @@ if(isset($_GET['delete_all'])){
    </div>
 
    <div class="wishlist-total">
-      <p>Total general :<span>$<?= $grand_total; ?>/-</span></p>
+      <p>Total general :<span>$<?= $grand_total; ?></span></p>
       <a href="shop.php" class="option-btn">Continuar comprando</a>
       <a href="wishlist.php?delete_all" class="delete-btn <?= ($grand_total > 1)?'':'disabled'; ?>" onclick="return confirm('¿borrar todo de la lista de favoritos?');">borrar todos los elementos</a>
    </div>

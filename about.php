@@ -43,7 +43,7 @@ if(isset($_SESSION['user_id'])){
          <h3>Mensaje de los promotores:</h3>
          <p>Hey There ! I'm Harsh Chaudhary. A Student of BE in Software Engineering Department from NCIT College [Batch : 2023] . I love designing websites and exploring new things. Learning new things is my hobby.</p>
 
-         <p>I would like to thank <a href="https://www.facebook.com/er.ashokbasnet" target="_blank">Er. Ashok Basnet</a> Sir for guiding me through the session and making me able to develop projects like this. </p>
+         <p>I would like to thank <a href="https://www.facebook.com/" target="_blank">Er. Ashok Basnet</a> Sir for guiding me through the session and making me able to develop projects like this. </p>
          <a href="contact.php" class="btn">Contáctanos</a>
       </div>
 
@@ -69,7 +69,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
          </div>
-         <h3> <a href="https://www.facebook.com/profile.php?id=100083292714419" target="_blank">Denisha Adhikari</a></h3>
+         <h3> <a href="https://www.facebook.com/" target="_blank">Cinthia Rivera</a></h3>
       </div>
 
       <div class="swiper-slide slide">
@@ -82,7 +82,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
          </div>
-         <h3><a href="https://www.facebook.com/profile.php?id=100075602340579" target="_blank">Rushab Risal</a></h3>
+         <h3><a href="https://www.facebook.com/" target="_blank">Emmanuel Escobar</a></h3>
       </div>
 
       <div class="swiper-slide slide">
@@ -95,7 +95,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
          </div>
-         <h3><a href="https://www.facebook.com/kaushalsah135790" target="_blank">Kaushal Shah</a></h3>
+         <h3><a href="https://www.facebook.com/" target="_blank">Carlos Ventura</a></h3>
       </div>
 
       <div class="swiper-slide slide">
@@ -108,7 +108,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
          </div>
-         <h3><a href="https://www.facebook.com/fuccheekta.moh.1" target="_blank">Subash Ray</a></h3>
+         <h3><a href="https://www.facebook.com/" target="_blank">Leonardo Iraheta</a></h3>
       </div>
 
       <div class="swiper-slide slide">
@@ -121,20 +121,7 @@ if(isset($_SESSION['user_id'])){
             <i class="fas fa-star"></i>
             <i class="fas fa-star-half-alt"></i>
          </div>
-         <h3><a href="https://www.facebook.com/ranjitchaudhary159" target="_blank">Ranjit Chaudhary</a></h3>
-      </div>
-
-      <div class="swiper-slide slide">
-         <img src="images/pic-6.jpg" alt="">
-         <p>¡SmartShop es genial! He pedido cientos de productos y nunca me han estafado. Entrega los productos a tiempo y sin retrasos. El embalaje de los productos es fuerte y las tasas de entrega son demasiado bajas. El sitio web es increíble y seguiré comprando en SmartShop.</p>
-         <div class="stars">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-         </div>
-         <h3><a href="https://www.facebook.com/pra.x.nil"  target="_blank">Pranil Poudel</a></h3>
+         <h3><a href="https://www.facebook.com/" target="_blank">Harold Orellana</a></h3>
       </div>
 
    </div>
