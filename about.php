@@ -41,9 +41,8 @@ if(isset($_SESSION['user_id'])){
 
       <div class="content">
          <h3>Mensaje de los promotores:</h3>
-         <p>Hey There ! I'm Harsh Chaudhary. A Student of BE in Software Engineering Department from NCIT College [Batch : 2023] . I love designing websites and exploring new things. Learning new things is my hobby.</p>
-
-         <p>I would like to thank <a href="https://www.facebook.com/" target="_blank">Er. Ashok Basnet</a> Sir for guiding me through the session and making me able to develop projects like this. </p>
+         <p>En SmartShop, nos emociona darte la bienvenida a nuestra comunidad de amantes de la tecnología. Como nuevo usuario, estás a punto de descubrir un mundo de posibilidades electrónicas que harán tu vida más fácil, entretenida y conectada.</p>
+         <p>Estamos emocionados de tener la oportunidad de ser parte de tu viaje tecnológico. Explora nuestro catálogo, disfruta de nuestras ofertas y descubre todo lo que SmartShop tiene para ofrecerte.</p>
          <a href="contact.php" class="btn">Contáctanos</a>
       </div>
 

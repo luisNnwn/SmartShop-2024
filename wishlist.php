@@ -72,7 +72,7 @@ if(isset($_GET['delete_all'])){
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
       <input type="submit" value="añadir al carrito" class="btn" name="add_to_cart">
-      <input type="submit" value="borrar elemento" onclick="return confirm('delete this from wishlist?');" class="delete-btn" name="delete">
+      <input type="submit" value="borrar elemento" onclick="return confirm('¿borrarlo de la lista de favoritos?');" class="delete-btn" name="delete">
    </form>
    <?php
       }

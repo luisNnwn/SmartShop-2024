@@ -33,7 +33,7 @@ include 'components/wishlist_cart.php';
 
 <section class="products">
 
-   <h1 class="heading">productos.</h1>
+   <h1 class="heading">productos</h1>
 
    <div class="box-container">
 
@@ -53,7 +53,7 @@ include 'components/wishlist_cart.php';
       <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
       <div class="name"><?= $fetch_product['name']; ?></div>
       <div class="flex">
-         <div class="price"><span>$</span><?= $fetch_product['price']; ?><span>/-</span></div>
+         <div class="price"><span>$</span><?= $fetch_product['price']; ?><span></span></div>
          <input type="number" name="qty" class="qty" min="1" max="99" onkeypress="if(this.value.length == 2) return false;" value="1">
       </div>
       <input type="submit" value="Añadir al carrito" class="btn" name="add_to_cart">

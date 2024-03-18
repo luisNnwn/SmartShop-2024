@@ -21,7 +21,7 @@ if(isset($_POST['order'])){
    $email = filter_var($email, FILTER_SANITIZE_STRING);
    $method = $_POST['method'];
    $method = filter_var($method, FILTER_SANITIZE_STRING);
-   $address = 'flat no. '. $_POST['flat'] .', '. $_POST['street'] .', '. $_POST['city'] .', '. $_POST['state'] .', '. $_POST['country'] .' - '. $_POST['pin_code'];
+   $address = 'Casa/piso No. '. $_POST['flat'] .', '. $_POST['street'] .', '. $_POST['city'] .', '. $_POST['state'] .', '. $_POST['country'] .' - '. $_POST['pin_code'];
    $address = filter_var($address, FILTER_SANITIZE_STRING);
    $total_products = $_POST['total_products'];
    $total_price = $_POST['total_price'];
@@ -85,7 +85,7 @@ if(isset($_POST['order'])){
       <?php
             }
          }else{
-            echo '<p class="empty">your cart is empty!</p>';
+            echo '<p class="empty">su carrito está vacío</p>';
          }
       ?>
          <input type="hidden" name="total_products" value="<?= $total_products; ?>">

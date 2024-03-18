@@ -37,15 +37,29 @@ if(isset($_POST['submit'])){
          // Enviar correo de bienvenida
          $to = $email;
          $subject = 'Bienvenido a nuestro sitio';
-         $message_body = 'Hola ' . $name . ',¡Bienvenido a nuestro sitio! Gracias por registrarte.';
-         $headers = 'From: smartshopsv24@gmail.com' . "\r\n" .
-            'Reply-To: smartshopsv24@gmail.com' . "\r\n" .
-            'X-Mailer: PHP/' . phpversion();
-
+         // Cuerpo del mensaje en formato HTML
+         $message_body = '
+         <html>
+         <head>
+         <title>Bienvenido a nuestro sitio</title>
+         </head>
+         <body>
+         <p>Hola ' . $name . ',</p>
+         <p>¡Bienvenido a nuestro sitio! Gracias por registrarte.</p>
+         <img src="images\logo.png" alt="Logo de la empresa">
+         </body>
+         </html>
+         ';
+         // Cabeceras para correo HTML
+         $headers = 'MIME-Version: 1.0' . "\r\n";
+         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+         $headers .= 'From: SmartShop <smartshopsv24@gmail.com>' . "\r\n";
+         $headers .= 'Reply-To: smartshopsv24@gmail.com' . "\r\n";
+         $headers .= 'X-Mailer: PHP/' . phpversion();
+         // Envío del correo
          mail($to, $subject, $message_body, $headers);
       }
    }
-
 }
 
 ?>

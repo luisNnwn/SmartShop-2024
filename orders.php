@@ -31,7 +31,7 @@ if(isset($_SESSION['user_id'])){
 
 <section class="orders">
 
-   <h1 class="heading">Pedidos realizados.</h1>
+   <h1 class="heading">Pedidos realizados</h1>
 
    <div class="box-container">
 
