@@ -21,7 +21,7 @@ use SebastianBergmann\Exporter\Exporter;
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Constraint implements Countable, SelfDescribing
+abstract class Constraint implements Countable, SelfDescribing
 {
     /**
      * Evaluates the constraint for parameter $other.
@@ -78,7 +78,7 @@ abstract readonly class Constraint implements Countable, SelfDescribing
      *
      * @throws ExpectationFailedException
      */
-    protected function fail(mixed $other, string $description, ComparisonFailure $comparisonFailure = null): never
+    protected function fail(mixed $other, string $description, ?ComparisonFailure $comparisonFailure = null): never
     {
         $failureDescription = sprintf(
             'Failed asserting that %s.',

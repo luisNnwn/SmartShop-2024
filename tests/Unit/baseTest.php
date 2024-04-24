@@ -42,3 +42,4 @@ class InsertUserTest extends TestCase
     }
 }
 
+//php vendor/bin/codecept run Unit baseTest

@@ -9,18 +9,19 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class TraversableContainsOnly extends Constraint
+final class TraversableContainsOnly extends Constraint
 {
-    private Constraint $constraint;
-    private string $type;
+    private readonly Constraint $constraint;
+    private readonly string $type;
 
     /**
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      */
     public function __construct(string $type, bool $isNativeType = true)
     {

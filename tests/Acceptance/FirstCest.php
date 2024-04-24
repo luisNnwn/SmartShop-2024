@@ -13,3 +13,5 @@ class FirstCest
         $I->see('Home');
     }
 }
+
+//php vendor/bin/codecept run --steps
