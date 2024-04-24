@@ -1,4 +1,9 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Incluye la biblioteca PHPMailer
+
 include 'components/connect.php';
 
 session_start();
@@ -34,34 +39,34 @@ if(isset($_POST['submit'])){
          $insert_user->execute([$name, $email, $cpass]);
          $message[] = 'Registrado con éxito, ¡inicie sesión ahora por favor!';
          
-         // Enviar correo de bienvenida
-         $to = $email;
-         $subject = 'Bienvenido a nuestro sitio';
-         // Cuerpo del mensaje en formato HTML
-         $message_body = '
-         <html>
-         <head>
-         <title>Bienvenido a nuestro sitio</title>
-         </head>
-         <body>
-         <p>Hola ' . $name . ',</p>
-         <p>¡Bienvenido a nuestro sitio! Gracias por registrarte.</p>
-         <img src="images\logo.png" alt="Logo de la empresa">
-         </body>
-         </html>
-         ';
-         // Cabeceras para correo HTML
-         $headers = 'MIME-Version: 1.0' . "\r\n";
-         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-         $headers .= 'From: SmartShop <smartshopsv24@gmail.com>' . "\r\n";
-         $headers .= 'Reply-To: smartshopsv24@gmail.com' . "\r\n";
-         $headers .= 'X-Mailer: PHP/' . phpversion();
-         // Envío del correo
-         mail($to, $subject, $message_body, $headers);
+         // Enviar correo de bienvenida con PHPMailer
+         $mail = new PHPMailer(true);
+
+         try {
+            // Configuración del servidor SMTP
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP de Gmail
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'smartshopsv24@gmail.com'; // Tu dirección de correo de Gmail
+            $mail->Password   = 'sehp qjua zmln xibs'; // Tu contraseña de Gmail
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+
+            // Destinatario y contenido del correo
+            $mail->setFrom('smartshopsv24@gmail.com', 'SmartShop');
+            $mail->addAddress($email, $name);
+            $mail->isHTML(true);
+            $mail->Subject = 'Bienvenido a nuestro sitio';
+            $mail->Body    = '<html><head><title>Bienvenido a nuestro sitio</title></head><body><p>Hola ' . $name . ',</p><p>¡Bienvenido a nuestro sitio! Gracias por registrarte.</p><img src="images/logo.png" alt="Logo de la empresa"></body></html>';
+
+            $mail->send();
+            echo '¡Se le ha enviado un correo de Bienvenida!';
+         } catch (Exception $e) {
+            echo "Error al enviar el correo: {$mail->ErrorInfo}";
+         }
       }
    }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -102,15 +107,6 @@ if(isset($_POST['submit'])){
    </form>
 
 </section>
-
-
-
-
-
-
-
-
-
 
 <?php include 'components/footer.php'; ?>
 

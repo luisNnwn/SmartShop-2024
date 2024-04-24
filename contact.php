@@ -25,7 +25,7 @@ if(isset($_POST['send'])){
    $select_message->execute([$name, $email, $number, $msg]);
 
    if($select_message->rowCount() > 0){
-      $message[] = 'already sent message!';
+      $message[] = '¡mensaje ya enviado!';
    }else{
 
       $insert_message = $conn->prepare("INSERT INTO `messages`(user_id, name, email, number, message) VALUES(?,?,?,?,?)");

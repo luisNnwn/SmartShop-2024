@@ -97,7 +97,7 @@ if(isset($_POST['order'])){
 
       <div class="flex">
          <div class="inputBox">
-            <span>Su nombre completo :</span>
+            <span>Su nombre :</span>
             <input type="text" name="name" placeholder="introduzca su nombre" class="box" maxlength="20" required>
          </div>
          <div class="inputBox">
@@ -126,18 +126,18 @@ if(isset($_POST['order'])){
          </div>
          <div class="inputBox">
             <span>Ciudad :</span>
-            <input type="text" name="city" placeholder="San Salvador" class="box" maxlength="50" required>
+            <input type="text" name="city" placeholder="" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>Provincia :</span>
-            <input type="text" name="state" placeholder="San Salvador" class="box" maxlength="50" required>
+            <span>Departamento:</span>
+            <input type="text" name="state" placeholder="" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
             <span>País :</span>
             <input type="text" name="country" placeholder="El Salvador" class="box" maxlength="50" required>
          </div>
          <div class="inputBox">
-            <span>CÓDIGO POSTAL :</span>
+            <span>Código postal :</span>
             <input type="number" min="0" name="pin_code" placeholder="e.j. 1601" min="0" max="999999" onkeypress="if(this.value.length == 6) return false;" class="box" required>
          </div>
       </div>

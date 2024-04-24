@@ -45,7 +45,7 @@ if(isset($_SESSION['user_id'])){
             while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
    ?>
    <div class="box">
-      <p>Colocado el :<span><?= $fetch_orders['placed_on']; ?></span></p>
+      <p>Colocado el día:<span><?= $fetch_orders['placed_on']; ?></span></p>
       <p>Nombre : <span><?= $fetch_orders['name']; ?></span></p>
       <p>Correo electrónico : <span><?= $fetch_orders['email']; ?></span></p>
       <p>Número de teléfono :<span><?= $fetch_orders['number']; ?></span></p>

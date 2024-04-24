@@ -49,7 +49,7 @@ if(isset($_GET['format'])){
 
    } elseif($format == 'csv'){
 
-    $headers = array('Colocado el', 'Nombre', 'Correo electrónico', 'Número de teléfono', 'Dirección', 'Forma de pago', 'Sus pedidos', 'Precio total', 'Estado del pago');
+    $headers = array('Colocado el día', 'Nombre', 'Correo electrónico', 'Número de teléfono', 'Dirección', 'Forma de pago', 'Sus pedidos', 'Precio total', 'Estado del pago');
 
     $output = fopen('php://output', 'w');
 

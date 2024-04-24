@@ -1,4 +1,8 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Incluye la biblioteca PHPMailer
 
 include 'components/connect.php';
 
@@ -25,17 +29,31 @@ if(isset($_POST['submit'])){
    $update_pass->execute([$hashed_pass, $email]);
 
    if($update_pass->rowCount() > 0){
-      // Enviar correo electrónico con la contraseña temporal
-      $to = $email;
-      $subject = 'Contraseña temporal';
-      $message = 'Su contraseña temporal es: ' . $temp_pass;
-      $headers = 'From: smartshopsv24@gmail.com' . "\r\n" .
-          'Reply-To: smartshopsv24@gmail.com' . "\r\n" .
-          'X-Mailer: PHP/' . phpversion();
+      // Enviar correo electrónico con la contraseña temporal utilizando PHPMailer
+      $mail = new PHPMailer(true);
 
-      mail($to, $subject, $message, $headers);
+      try {
+         // Configuración del servidor SMTP
+         $mail->isSMTP();
+         $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP de Gmail
+         $mail->SMTPAuth   = true;
+         $mail->Username   = 'smartshopsv24@gmail.com'; // Tu dirección de correo de Gmail
+         $mail->Password   = 'sehp qjua zmln xibs'; // Tu contraseña de Gmail
+         $mail->SMTPSecure = 'tls';
+         $mail->Port       = 587;
 
-      $success_message = 'Se ha enviado una contraseña temporal a su correo electrónico.';
+         // Destinatario y contenido del correo
+         $mail->setFrom('smartshopsv24@gmail.com', 'SmartShop');
+         $mail->addAddress($email);
+         $mail->isHTML(true);
+         $mail->Subject = 'Contraseña temporal';
+         $mail->Body    = 'Su contraseña temporal es: ' . $temp_pass;
+
+         $mail->send();
+         $success_message = 'Se ha enviado una contraseña temporal a su correo electrónico.';
+      } catch (Exception $e) {
+         $error_message = 'Error al enviar el correo: ' . $mail->ErrorInfo;
+      }
    }else{
       $error_message = 'No se pudo recuperar la contraseña. Verifique su correo electrónico.';
    }

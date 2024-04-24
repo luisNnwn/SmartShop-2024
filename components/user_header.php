@@ -16,10 +16,10 @@
 
    <section class="flex">
 
-      <a href="home.php" class="logo">Smart<span>Shop</span></a>
+      <a href="index.php" class="logo">Smart<span>Shop</span></a>
 
       <nav class="navbar">
-         <a href="home.php">Inicio</a>
+         <a href="index.php">Inicio</a>
          <a href="about.php">Sobre nosotros</a>
          <a href="orders.php">Pedidos</a>
          <a href="shop.php">Compra ahora</a>
@@ -60,7 +60,7 @@
          <?php
             }else{
          ?>
-         <p>Inicie sesión o regístrese primero para continuar!</p>
+         <p>Inicie sesión o regístrese primero para continuar</p>
          <div class="flex-btn">
             <a href="user_register.php" class="option-btn">Registrarse</a>
             <a href="user_login.php" class="option-btn">Iniciar sesión</a>

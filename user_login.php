@@ -22,7 +22,7 @@ if(isset($_POST['submit'])){
 
    if($select_user->rowCount() > 0){
       $_SESSION['user_id'] = $row['id'];
-      header('location:home.php');
+      header('location:index.php');
    }else{
       $message[] = '¡Nombre de usuario o contraseña incorrectos!';
    }

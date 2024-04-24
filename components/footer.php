@@ -35,6 +35,6 @@
 
    </section>
 
-   <div class="credit">&copy; copyright @ <?= date('Y'); ?> by <span>Project Kanban</span> | todos los derechos reservados!</div>
+   <div class="credit">&copy; copyright @ <?= date('Y'); ?> by <span>Project XP</span> | todos los derechos reservados!</div>
 
 </footer>
