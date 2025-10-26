@@ -1,21 +1,34 @@
 <?php
-// -------------------------------------------------------
-// MODO DEMO / SIN BASE DE DATOS
-// Permite mostrar toda la web sin conexión activa
-// -------------------------------------------------------
+// ---------------------------------------------
+// CONEXIÓN REAL A MYSQL (RAILWAY + RENDER)
+// ---------------------------------------------
 
-$db_host = getenv('DB_HOST') ?: 'host.docker.internal';
-$db_name = getenv('DB_NAME') ?: 'shop_db';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// 🚀 Toma las variables del entorno (Render)
+$db_host = getenv('DB_HOST') ?: 'ballast.proxy.rlwy.net';
+$db_port = getenv('DB_PORT') ?: 54282;
+$db_name = getenv('DB_NAME') ?: 'railway';
 $db_user = getenv('DB_USER') ?: 'root';
-$db_pass = getenv('DB_PASS') ?: '';
+$db_pass = getenv('DB_PASS') ?: 'LUtKbjoCyRKNxGaNMhMWrozBRuLRmDTu';
 
 try {
-    $conn = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (Exception $e) {
-    // Si falla la conexión, creamos un "falso" objeto vacío
+    $conn = new PDO(
+        "mysql:host=$db_host;port=$db_port;dbname=$db_name;charset=utf8mb4",
+        $db_user,
+        $db_pass,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT => true // Mantiene viva la conexión
+        ]
+    );
+    // echo "<p style='color:lime;text-align:center;'>✅ Conectado a MySQL</p>";
+} catch (PDOException $e) {
+    // Muestra un aviso visual si hay un problema real (no modo demo)
+    echo "<p style='color:orange;text-align:center;margin-top:1rem;'>⚠️ Error de conexión: " . htmlspecialchars($e->getMessage()) . "</p>";
     $conn = null;
-    // No mostramos errores para que la web cargue normal
 }
 ?>
 
