@@ -1,83 +1,132 @@
 <?php
-// download.php
-include 'components/connect.php';
+// download.php – Petals by Montse
 
+include 'components/connect.php';
 session_start();
 
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
+if(!isset($_SESSION['user_id']) || $_SESSION['user_id'] == ''){
+   header('location:user_login.php');
+   exit;
+}
 
+$user_id = $_SESSION['user_id'];
 
 if(isset($_GET['format'])){
    $format = $_GET['format'];
 
+   // 📄 DESCARGA EN PDF
    if($format == 'pdf'){
 
-    require_once('tcpdf/tcpdf.php');
+      require_once('tcpdf/tcpdf.php');
 
-    $pdf = new TCPDF();
-    $pdf->AddPage();
+      // Crear PDF
+      $pdf = new TCPDF();
+      $pdf->SetCreator(PDF_CREATOR);
+      $pdf->SetAuthor('Petals by Montse');
+      $pdf->SetTitle('Historial de Pedidos - Petals by Montse');
+      $pdf->AddPage();
 
-    $content = '<h1>Historial de Pedidos - SmartShop</h1>';
-    $content .= '<table border="1">';
-    $content .= '<tr><th>Colocado el</th><th>Nombre</th><th>Correo electrónico</th><th>Número de teléfono</th><th>Dirección</th><th>Forma de pago</th><th>Sus pedidos</th><th>Precio total</th><th>Estado del pago</th></tr>';
+      // Cabecera estilizada
+      $content = '
+      <h1 style="text-align:center; color:#d36c8c;">Historial de Pedidos</h1>
+      <p style="text-align:center; font-size:12px;">Gracias por confiar en Petals by Montse 🌸<br>
+      Aquí encontrarás el detalle de tus pedidos realizados.</p>
+      <br><br>
+      <table border="1" cellpadding="6" style="font-size:10px; border-color:#d36c8c;">
+         <thead style="background-color:#fbe8ed;">
+            <tr>
+               <th><b>Fecha</b></th>
+               <th><b>Nombre</b></th>
+               <th><b>Correo</b></th>
+               <th><b>Teléfono</b></th>
+               <th><b>Dirección</b></th>
+               <th><b>Método de Pago</b></th>
+               <th><b>Productos</b></th>
+               <th><b>Total</b></th>
+               <th><b>Estado</b></th>
+            </tr>
+         </thead>
+         <tbody>';
 
-    $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
-    $select_orders->execute([$user_id]);
-    while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
-        $content .= '<tr>';
-        $content .= '<td>' . $fetch_orders['placed_on'] . '</td>';
-        $content .= '<td>' . $fetch_orders['name'] . '</td>';
-        $content .= '<td>' . $fetch_orders['email'] . '</td>';
-        $content .= '<td>' . $fetch_orders['number'] . '</td>';
-        $content .= '<td>' . $fetch_orders['address'] . '</td>';
-        $content .= '<td>' . $fetch_orders['method'] . '</td>';
-        $content .= '<td>' . $fetch_orders['total_products'] . '</td>';
-        $content .= '<td>$' . $fetch_orders['total_price'] . '</td>';
-        $content .= '<td style="color:' . ($fetch_orders['payment_status'] == 'pendiente' ? 'red' : 'green') . ';">' . $fetch_orders['payment_status'] . '</td>';
-        $content .= '</tr>';
-    }
+      // Consultar pedidos
+      $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
+      $select_orders->execute([$user_id]);
 
-    $content .= '</table>';
-    $pdf->writeHTML($content, true, false, true, false, '');
+      if($select_orders->rowCount() > 0){
+         while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
+            $status_color = $fetch_orders['payment_status'] == 'pendiente' ? 'color:red;' : 'color:green;';
+            $content .= '
+               <tr>
+                  <td>'.$fetch_orders['placed_on'].'</td>
+                  <td>'.$fetch_orders['name'].'</td>
+                  <td>'.$fetch_orders['email'].'</td>
+                  <td>'.$fetch_orders['number'].'</td>
+                  <td>'.$fetch_orders['address'].'</td>
+                  <td>'.$fetch_orders['method'].'</td>
+                  <td>'.$fetch_orders['total_products'].'</td>
+                  <td>$'.$fetch_orders['total_price'].'</td>
+                  <td style="'.$status_color.'">'.$fetch_orders['payment_status'].'</td>
+               </tr>';
+         }
+      } else {
+         $content .= '
+            <tr>
+               <td colspan="9" style="text-align:center; color:#888;">No se han encontrado pedidos.</td>
+            </tr>';
+      }
 
-    $pdf->Output('historial_pedidos.pdf', 'D');
-    exit();
+      $content .= '
+         </tbody>
+      </table>
+      <br><br>
+      <p style="text-align:center; font-size:10px; color:#555;">
+         Petals by Montse • Floristería artesanal en línea 🌷 <br>
+         San Salvador, El Salvador
+      </p>';
 
-   } elseif($format == 'csv'){
+      $pdf->writeHTML($content, true, false, true, false, '');
+      $pdf->Output('historial_pedidos_petals.pdf', 'D');
+      exit();
 
-    $headers = array('Colocado el día', 'Nombre', 'Correo electrónico', 'Número de teléfono', 'Dirección', 'Forma de pago', 'Sus pedidos', 'Precio total', 'Estado del pago');
+   }
 
-    $output = fopen('php://output', 'w');
+   // 📊 DESCARGA EN CSV
+   elseif($format == 'csv'){
 
-    fputcsv($output, $headers);
+      header('Content-Type: text/csv; charset=utf-8');
+      header('Content-Disposition: attachment; filename=historial_pedidos_petals.csv');
 
-    $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
-    $select_orders->execute([$user_id]);
-    while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
-        $data = array(
-            $fetch_orders['placed_on'],
-            $fetch_orders['name'],
-            $fetch_orders['email'],
-            $fetch_orders['number'],
-            $fetch_orders['address'],
-            $fetch_orders['method'],
-            $fetch_orders['total_products'],
-            '$' . $fetch_orders['total_price'],
-            $fetch_orders['payment_status']
-        );
-        fputcsv($output, $data);
-    }
+      $output = fopen('php://output', 'w');
 
-    fclose($output);
+      // Encabezados
+      fputcsv($output, [
+         'Fecha', 'Nombre', 'Correo electrónico', 'Número de teléfono',
+         'Dirección', 'Método de pago', 'Productos', 'Total ($)', 'Estado del pago'
+      ]);
 
-    header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename=historial_pedidos.csv');
-    exit();
-}
+      $select_orders = $conn->prepare("SELECT * FROM `orders` WHERE user_id = ?");
+      $select_orders->execute([$user_id]);
 
+      if($select_orders->rowCount() > 0){
+         while($fetch_orders = $select_orders->fetch(PDO::FETCH_ASSOC)){
+            fputcsv($output, [
+               $fetch_orders['placed_on'],
+               $fetch_orders['name'],
+               $fetch_orders['email'],
+               $fetch_orders['number'],
+               $fetch_orders['address'],
+               $fetch_orders['method'],
+               $fetch_orders['total_products'],
+               '$'.$fetch_orders['total_price'],
+               $fetch_orders['payment_status']
+            ]);
+         }
+      } else {
+         fputcsv($output, ['No se encontraron pedidos']);
+      }
+
+      fclose($output);
+      exit();
+   }
 }
 ?>

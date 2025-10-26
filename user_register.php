@@ -2,67 +2,71 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Incluye la biblioteca PHPMailer
-
+require 'vendor/autoload.php';
 include 'components/connect.php';
 
-session_start();
+// Aseguramos la sesión
+if (session_status() === PHP_SESSION_NONE) {
+   session_start();
+}
 
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
+$user_id = $_SESSION['user_id'] ?? '';
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
-   $pass = sha1($_POST['pass']);
-   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
-   $cpass = sha1($_POST['cpass']);
-   $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+   // ✅ Sanitización moderna y segura
+   $name  = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
+   $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
 
+   $pass  = sha1(trim($_POST['pass']));
+   $cpass = sha1(trim($_POST['cpass']));
+
+   // Verificar existencia de usuario
    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
    $select_user->execute([$email]);
-   $row = $select_user->fetch(PDO::FETCH_ASSOC);
 
-   if($select_user->rowCount() > 0){
-      $message[] = '¡El correo electrónico ya existe!';
-   }else{
-      if($pass != $cpass){
-         $message[] = '¡Confirmar contraseña no coincide!';
-      }else{
+   if ($select_user->rowCount() > 0) {
+      $message[] = '🌸 Este correo ya está registrado.';
+   } else {
+      if ($pass !== $cpass) {
+         $message[] = '💐 Las contraseñas no coinciden.';
+      } else {
+         // Insertar usuario
          $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
          $insert_user->execute([$name, $email, $cpass]);
-         $message[] = 'Registrado con éxito, ¡inicie sesión ahora por favor!';
-         
+         $message[] = '✨ Registro exitoso. Bienvenida a Petals by Montse 🌷';
+
          // Enviar correo de bienvenida con PHPMailer
          $mail = new PHPMailer(true);
-
          try {
-            // Configuración del servidor SMTP
             $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP de Gmail
+            $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'smartshopsv24@gmail.com'; // Tu dirección de correo de Gmail
-            $mail->Password   = 'sehp qjua zmln xibs'; // Tu contraseña de Gmail
-            $mail->SMTPSecure = 'tls';
+            $mail->Username   = 'smartshopsv24@gmail.com';
+            $mail->Password   = 'sehp qjua zmln xibs';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
 
-            // Destinatario y contenido del correo
-            $mail->setFrom('smartshopsv24@gmail.com', 'SmartShop');
+            $mail->setFrom('smartshopsv24@gmail.com', 'Petals by Montse');
             $mail->addAddress($email, $name);
             $mail->isHTML(true);
-            $mail->Subject = 'Bienvenido a nuestro sitio';
-            $mail->Body    = '<html><head><title>Bienvenido a nuestro sitio</title></head><body><p>Hola ' . $name . ',</p><p>¡Bienvenido a nuestro sitio! Gracias por registrarte.</p><img src="images/logo.png" alt="Logo de la empresa"></body></html>';
-
+            $mail->Subject = '🌸 ¡Bienvenida a Petals by Montse!';
+            $mail->Body = '
+               <html>
+               <head><title>Bienvenida a Petals by Montse</title></head>
+               <body style="font-family:Arial, sans-serif; background-color:#fffafc; padding:20px;">
+                  <div style="max-width:600px; margin:auto; border-radius:8px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.1); padding:20px;">
+                     <h2 style="color:#b14f76;">🌷 ¡Hola, '.htmlspecialchars($name, ENT_QUOTES, 'UTF-8').'!</h2>
+                     <p>Gracias por unirte a <strong>Petals by Montse</strong>. A partir de hoy, podrás descubrir nuestros arreglos florales, ofertas y detalles pensados para cada momento especial.</p>
+                     <p>🌼 Tu registro se ha completado correctamente. ¡Prepárate para llenar tus días de color y aroma!</p>
+                     <hr style="border:none; border-top:1px solid #eee;">
+                     <p style="color:#888; font-size:0.9rem;">Este correo fue enviado automáticamente por Petals by Montse.</p>
+                  </div>
+               </body>
+               </html>';
             $mail->send();
-            echo '¡Se le ha enviado un correo de Bienvenida!';
          } catch (Exception $e) {
-            echo "Error al enviar el correo: {$mail->ErrorInfo}";
+            $message[] = "⚠️ No se pudo enviar el correo de bienvenida.";
          }
       }
    }
@@ -70,17 +74,27 @@ if(isset($_POST['submit'])){
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Registrarse</title>
+   <title>Registro | Petals by Montse</title>
    
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <link rel="stylesheet" href="css/style.css">
-
+   <style>
+      .error-message {
+         background: #f9ecec;
+         color: #a94442;
+         border-left: 4px solid #e74c3c;
+         padding: 1rem;
+         border-radius: .5rem;
+         font-size: 1.6rem;
+         text-align: center;
+         margin-bottom: 1rem;
+      }
+   </style>
 </head>
 <body>
    
@@ -89,21 +103,23 @@ if(isset($_POST['submit'])){
 <section class="form-container">
 
    <form action="" method="post">
-      <h3>Regístrese ahora.</h3>
+      <h3>🌷 Crea tu cuenta</h3>
+
       <?php
-      if(isset($message)){
-         foreach($message as $msg){
-            echo '<p class="error-message">' . $msg . '</p>';
+      if (!empty($message)) {
+         foreach ($message as $msg) {
+            echo '<p class="error-message">'.htmlspecialchars($msg, ENT_QUOTES, 'UTF-8').'</p>';
          }
       }
       ?>
-      <input type="text" name="name" required placeholder="Introduzca su nombre de usuario" maxlength="20"  class="box">
-      <input type="email" name="email" required placeholder="Introduzca su correo electrónico" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" required placeholder="Introduzca su contraseña" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" required placeholder="Confirme su contraseña" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="Regístrese ahora" class="btn" name="submit">
-      <p>¿Ya tiene una cuenta?</p>
-      <a href="user_login.php" class="option-btn">Inicie sesión</a>
+
+      <input type="text" name="name" required placeholder="Tu nombre completo" maxlength="40" class="box">
+      <input type="email" name="email" required placeholder="Tu correo electrónico" maxlength="50" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="pass" required placeholder="Crea una contraseña segura" maxlength="20" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="cpass" required placeholder="Confirma tu contraseña" maxlength="20" class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="submit" value="Registrarme" class="btn" name="submit">
+      <p>¿Ya tienes una cuenta?</p>
+      <a href="user_login.php" class="option-btn">Iniciar sesión</a>
    </form>
 
 </section>

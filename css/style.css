@@ -1,15 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
+
+h1, h2, h3, .heading {
+   font-family: 'Playfair Display', serif;
+}
 
 :root{
-   --main-color:#2980b9;
-   --orange:#f39c12;
-   --red:#e74c3c;
-   --black:#333;
-   --white:#fff;
-   --light-color:#666;
-   --light-bg:#eee;
-   --border:.2rem solid var(--black);
-   --box-shadow:0 .5rem 1rem rgba(0,0,0,.1);
+   /* 🎨 Paleta floral */
+   --main-color:#d36c8c;      /* rosa floral principal */
+   --orange:#e0a96d;          /* tono cálido para botones secundarios */
+   --red:#d94f4f;             /* rojo más suave y romántico */
+   --black:#2f2f2f;           /* gris oscuro elegante */
+   --white:#fff;              /* blanco base */
+   --light-color:#666;        /* gris medio para textos */
+   --light-bg:#fff8f9;        /* fondo suave rosado */
+   --border:.2rem solid var(--main-color);
+   --box-shadow:0 .5rem 1rem rgba(211,108,140,.15);
 }
 
 *{
@@ -264,13 +269,13 @@ section{
 
 .home-bg .home .slide .content span{
    font-size: 2rem;
-   color:var(--white);
+   color:var(--main-color);
 }
 
 .home-bg .home .slide .content h3{
    margin-top: 1rem;
    font-size: 4rem;
-   color:var(--white);
+   color:var(--main-color);
    text-transform: uppercase;
 }
 
