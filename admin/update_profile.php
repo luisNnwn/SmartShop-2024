@@ -1,64 +1,65 @@
 <?php
-
 include '../components/connect.php';
-
 session_start();
 
-$admin_id = $_SESSION['admin_id'];
-
-if(!isset($admin_id)){
+$admin_id = $_SESSION['admin_id'] ?? null;
+if(!$admin_id){
    header('location:admin_login.php');
+   exit;
 }
+
+// 🔹 Obtener datos del administrador actual
+$select_admin = $conn->prepare("SELECT * FROM `admins` WHERE id = ?");
+$select_admin->execute([$admin_id]);
+$fetch_profile = $select_admin->fetch(PDO::FETCH_ASSOC);
 
 if(isset($_POST['submit'])){
 
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
 
-   $update_profile_name = $conn->prepare("UPDATE `admins` SET name = ? WHERE id = ?");
-   $update_profile_name->execute([$name, $admin_id]);
+   // Actualizar nombre
+   $update_name = $conn->prepare("UPDATE `admins` SET name = ? WHERE id = ?");
+   $update_name->execute([$name, $admin_id]);
+   $message[] = '✅ Nombre actualizado correctamente.';
 
-   $empty_pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
-   $prev_pass = $_POST['prev_pass'];
-   $old_pass = sha1($_POST['old_pass']);
-   $old_pass = filter_var($old_pass, FILTER_SANITIZE_STRING);
-   $new_pass = sha1($_POST['new_pass']);
-   $new_pass = filter_var($new_pass, FILTER_SANITIZE_STRING);
-   $confirm_pass = sha1($_POST['confirm_pass']);
-   $confirm_pass = filter_var($confirm_pass, FILTER_SANITIZE_STRING);
+   // Contraseñas
+   $old_pass_input = $_POST['old_pass'];
+   $new_pass_input = $_POST['new_pass'];
+   $confirm_pass_input = $_POST['confirm_pass'];
 
-   if($old_pass == $empty_pass){
-      $message[] = 'por favor, introduzca su antigua contraseña';
-   }elseif($old_pass != $prev_pass){
-      $message[] = '¡contraseña antigua no coincide!';
-   }elseif($new_pass != $confirm_pass){
-      $message[] = '¡confirmar contraseña no coincide!';
-   }else{
-      if($new_pass != $empty_pass){
-         $update_admin_pass = $conn->prepare("UPDATE `admins` SET password = ? WHERE id = ?");
-         $update_admin_pass->execute([$confirm_pass, $admin_id]);
-         $message[] = '¡contraseña actualizada correctamente!';
-      }else{
-         $message[] = 'por favor, introduzca una nueva contraseña';
+   $empty_hash = sha1('');
+
+   $old_pass = sha1($old_pass_input);
+   $new_pass = sha1($new_pass_input);
+   $confirm_pass = sha1($confirm_pass_input);
+
+   if($old_pass_input != '' || $new_pass_input != '' || $confirm_pass_input != '') {
+
+      if($old_pass == $empty_hash){
+         $message[] = '⚠️ Introduzca su contraseña actual.';
+      } elseif($old_pass != $fetch_profile['password']){
+         $message[] = '❌ La contraseña actual no coincide.';
+      } elseif($new_pass != $confirm_pass){
+         $message[] = '⚠️ Las contraseñas nuevas no coinciden.';
+      } else {
+         $update_pass = $conn->prepare("UPDATE `admins` SET password = ? WHERE id = ?");
+         $update_pass->execute([$confirm_pass, $admin_id]);
+         $message[] = '🔒 Contraseña actualizada correctamente.';
       }
    }
-   
 }
-
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Update Profile</title>
+   <title>Actualizar Perfil | Panel Admin</title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <link rel="stylesheet" href="../css/admin_style.css">
-
 </head>
 <body>
 
@@ -68,28 +69,40 @@ if(isset($_POST['submit'])){
 
    <form action="" method="post">
       <h3>Actualizar perfil</h3>
-      <input type="hidden" name="prev_pass" value="<?= $fetch_profile['password']; ?>">
-      <input type="text" name="name" value="<?= $fetch_profile['name']; ?>" required placeholder="introduzca su nombre de usuario" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="old_pass" placeholder="introduzca la contraseña antigua" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="new_pass" placeholder="introduzca la nueva contraseña" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="confirm_pass" placeholder="confirmar nueva contraseña" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="Actualizar" class="btn" name="submit">
+
+      <?php
+      if(isset($message)){
+         foreach($message as $msg){
+            echo '<p class="error-message">'.$msg.'</p>';
+         }
+      }
+      ?>
+
+      <input type="text" name="name" value="<?= htmlspecialchars($fetch_profile['name']); ?>"
+             required placeholder="Introduzca su nombre de usuario"
+             maxlength="20" class="box"
+             oninput="this.value = this.value.replace(/\s/g, '')">
+
+      <input type="password" name="old_pass"
+             placeholder="Introduzca su contraseña actual"
+             maxlength="20" class="box"
+             oninput="this.value = this.value.replace(/\s/g, '')">
+
+      <input type="password" name="new_pass"
+             placeholder="Introduzca su nueva contraseña"
+             maxlength="20" class="box"
+             oninput="this.value = this.value.replace(/\s/g, '')">
+
+      <input type="password" name="confirm_pass"
+             placeholder="Confirme su nueva contraseña"
+             maxlength="20" class="box"
+             oninput="this.value = this.value.replace(/\s/g, '')">
+
+      <input type="submit" value="Actualizar perfil" class="btn" name="submit">
    </form>
 
 </section>
 
-
-
-
-
-
-
-
-
-
-
-
 <script src="../js/admin_script.js"></script>
-   
 </body>
 </html>

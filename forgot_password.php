@@ -2,8 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Incluye la biblioteca PHPMailer
-
+require 'vendor/autoload.php';
 include 'components/connect.php';
 
 session_start();
@@ -12,50 +11,77 @@ if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
    $user_id = '';
-};
+}
 
 if(isset($_POST['submit'])){
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $email = trim($_POST['email']);
+   $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-   // Generar contraseña temporal
-   $temp_pass = generateRandomString(10); // Función para generar una cadena aleatoria
+   // Verificar si el correo existe en la base
+   $check_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $check_user->execute([$email]);
 
-   // Encriptar la contraseña temporal
-   $hashed_pass = sha1($temp_pass);
+   if($check_user->rowCount() == 0){
+      $error_message = '🌷 No encontramos ninguna cuenta asociada a este correo.';
+   } else {
+      // Generar contraseña temporal
+      $temp_pass = generateRandomString(10);
+      $hashed_pass = sha1($temp_pass);
 
-   // Actualizar la contraseña temporal en la base de datos
-   $update_pass = $conn->prepare("UPDATE `users` SET password = ? WHERE email = ?");
-   $update_pass->execute([$hashed_pass, $email]);
+      // Actualizar contraseña temporal
+      $update_pass = $conn->prepare("UPDATE `users` SET password = ? WHERE email = ?");
+      $update_pass->execute([$hashed_pass, $email]);
 
-   if($update_pass->rowCount() > 0){
-      // Enviar correo electrónico con la contraseña temporal utilizando PHPMailer
-      $mail = new PHPMailer(true);
+      if($update_pass->rowCount() > 0){
+         $mail = new PHPMailer(true);
 
-      try {
-         // Configuración del servidor SMTP
-         $mail->isSMTP();
-         $mail->Host       = 'smtp.gmail.com'; // Servidor SMTP de Gmail
-         $mail->SMTPAuth   = true;
-         $mail->Username   = 'smartshopsv24@gmail.com'; // Tu dirección de correo de Gmail
-         $mail->Password   = 'sehp qjua zmln xibs'; // Tu contraseña de Gmail
-         $mail->SMTPSecure = 'tls';
-         $mail->Port       = 587;
+         try {
+            // Configuración del servidor SMTP
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'smartshopsv24@gmail.com';
+            $mail->Password   = 'sehp qjua zmln xibs';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
 
-         // Destinatario y contenido del correo
-         $mail->setFrom('smartshopsv24@gmail.com', 'SmartShop');
-         $mail->addAddress($email);
-         $mail->isHTML(true);
-         $mail->Subject = 'Contraseña temporal';
-         $mail->Body    = 'Su contraseña temporal es: ' . $temp_pass;
+            // Datos del remitente
+            $mail->setFrom('smartshopsv24@gmail.com', 'Petals by Montse');
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $mail->Subject = '🌸 Recuperación de Contraseña - Petals by Montse';
+            $mail->Body    = '
+               <html>
+               <head>
+                  <style>
+                     body { font-family: "Nunito", sans-serif; color:#444; background-color:#fff8f9; }
+                     .container { padding:20px; border-radius:8px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.1); }
+                     h2 { color:#d36c8c; }
+                     p { font-size:16px; line-height:1.5; }
+                     .code { background:#d36c8c; color:#fff; display:inline-block; padding:10px 18px; border-radius:6px; letter-spacing:1px; font-weight:bold; }
+                  </style>
+               </head>
+               <body>
+                  <div class="container">
+                     <h2>Hola 🌷</h2>
+                     <p>Recibimos una solicitud para restablecer tu contraseña en <strong>Petals by Montse</strong>.</p>
+                     <p>Tu nueva contraseña temporal es:</p>
+                     <p class="code">'.$temp_pass.'</p>
+                     <p>Por seguridad, te recomendamos iniciar sesión y cambiarla de inmediato desde tu perfil.</p>
+                     <p>Gracias por confiar en nosotros,<br><strong>El equipo de Petals by Montse</strong></p>
+                  </div>
+               </body>
+               </html>
+            ';
 
-         $mail->send();
-         $success_message = 'Se ha enviado una contraseña temporal a su correo electrónico.';
-      } catch (Exception $e) {
-         $error_message = 'Error al enviar el correo: ' . $mail->ErrorInfo;
+            $mail->send();
+            $success_message = '🌼 Se ha enviado una contraseña temporal a tu correo electrónico.';
+         } catch (Exception $e) {
+            $error_message = 'Error al enviar el correo: ' . $mail->ErrorInfo;
+         }
+      } else {
+         $error_message = 'No se pudo actualizar la contraseña temporal.';
       }
-   }else{
-      $error_message = 'No se pudo recuperar la contraseña. Verifique su correo electrónico.';
    }
 }
 
@@ -70,43 +96,37 @@ function generateRandomString($length = 10) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
    <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Recuperar Contraseña</title>
-   
+   <title>Recuperar contraseña - Petals by Montse</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
-   
+
 <?php include 'components/user_header.php'; ?>
 
 <section class="form-container">
-
    <form action="" method="post">
-      <h3>Recuperar Contraseña</h3>
+      <h3>Recuperar contraseña</h3>
+
       <?php
       if(isset($error_message)){
-         echo '<p class="error-message">' . $error_message . '</p>';
+         echo '<p class="error-message" style="color:#d94f4f;">'.$error_message.'</p>';
       }
       if(isset($success_message)){
-         echo '<p class="success-message">' . $success_message . '</p>';
+         echo '<p class="success-message" style="color:#4CAF50;">'.$success_message.'</p>';
       }
       ?>
-      <input type="email" name="email" required placeholder="Introduzca su correo electrónico" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="Enviar Contraseña Temporal" class="btn" name="submit">
-   </form>
 
+      <input type="email" name="email" required placeholder="Ingresa tu correo electrónico" maxlength="50" class="box">
+      <input type="submit" value="Enviar contraseña temporal" class="btn" name="submit">
+   </form>
 </section>
 
 <?php include 'components/footer.php'; ?>
-
 <script src="js/script.js"></script>
-
 </body>
 </html>
