@@ -1,8 +1,9 @@
 # Imagen base de PHP 8.2 CLI
 FROM php:8.2-cli
 
-# Fix DNS para entornos con resolución rota (como Render)
-RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+# Configurar DNS alternativo para evitar fallos de resolución en Render
+RUN echo "Acquire::ForceIPv4 \"true\";" > /etc/apt/apt.conf.d/99force-ipv4 && \
+    echo "Acquire::http::Proxy \"false\";" > /etc/apt/apt.conf.d/99disable-proxy
 
 # Instalar dependencias del sistema necesarias para Composer y extensiones
 RUN apt-get update && apt-get install -y git unzip libzip-dev && \
@@ -18,7 +19,6 @@ WORKDIR /var/www/html
 COPY . .
 
 # Instalar dependencias PHP (PHPMailer, etc.) dentro del contenedor
-# Si por alguna razón Render limpia vendor/, este comando lo reinstala igual
 RUN if [ ! -f vendor/autoload.php ]; then composer install --no-dev --optimize-autoloader; fi
 
 # Exponer el puerto que Render usa
