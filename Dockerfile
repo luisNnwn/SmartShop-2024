@@ -22,4 +22,3 @@ EXPOSE 10000
 
 # Comando para iniciar el servidor embebido de PHP
 CMD ["php", "-S", "0.0.0.0:10000", "-t", "."]
-z
