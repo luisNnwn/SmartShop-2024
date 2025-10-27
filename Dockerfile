@@ -18,8 +18,8 @@ WORKDIR /var/www/html
 # Copiar el contenido del proyecto
 COPY . .
 
-# Instalar dependencias PHP (PHPMailer, etc.) dentro del contenedor
-RUN if [ ! -f vendor/autoload.php ]; then composer install --no-dev --optimize-autoloader; fi
+# Instalar dependencias PHP (PHPMailer, etc.)
+RUN composer install --no-dev --optimize-autoloader
 
 # Exponer el puerto que Render usa
 EXPOSE 10000
