@@ -27,8 +27,7 @@ try {
     // echo "<p style='color:lime;text-align:center;'>✅ Conectado a MySQL</p>";
 } catch (PDOException $e) {
     // Muestra un aviso visual si hay un problema real (no modo demo)
-    echo "<p style='color:orange;text-align:center;margin-top:1rem;'>⚠️ Error de conexión: " . htmlspecialchars($e->getMessage()) . "</p>";
     $conn = null;
 }
-?>
+
 
