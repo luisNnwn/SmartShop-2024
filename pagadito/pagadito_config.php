@@ -7,7 +7,6 @@
 define('PAGADITO_UID', getenv('PAGADITO_UID') ?: '');
 define('PAGADITO_WSK', getenv('PAGADITO_WSK') ?: '');
 
-// Validar credenciales obligatorias
 if (!PAGADITO_UID || !PAGADITO_WSK) {
     die('❌ Error: Credenciales Pagadito no configuradas. Verifica PAGADITO_UID y PAGADITO_WSK en Render.');
 }
@@ -15,11 +14,11 @@ if (!PAGADITO_UID || !PAGADITO_WSK) {
 // Entorno (sandbox o production)
 define('PAGADITO_ENV', getenv('PAGADITO_ENV') ?: 'production');
 
-// URL base de Pagadito según el entorno
+// URL base del SDK (no usar pagadi.to)
 if (PAGADITO_ENV === 'production') {
-    define('PAGADITO_API_URL', 'https://api.pagadi.to');
+    define('PAGADITO_API_URL', 'https://comercios.pagadito.com/apipg/charges.php');
 } else {
-    define('PAGADITO_API_URL', 'https://sandbox.pagadi.to');
+    define('PAGADITO_API_URL', 'https://sandbox.pagadito.com/comercios/apipg/charges.php');
 }
 
 // Rutas de retorno (Render HTTPS)

@@ -1,58 +1,35 @@
 <?php
+require_once '../components/connect.php';
+require_once '../pagadito-sdk/Pagadito.php';
 require_once 'pagadito_config.php';
-include '../components/connect.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
+if (session_status() === PHP_SESSION_NONE) session_start();
 
-// Simulación: datos de pedido desde tu carrito (ajusta según tus tablas)
-$user_id = $_SESSION['user_id'] ?? 0;
-$total = $_POST['total'] ?? 20.00; // total de compra
-$detalle = "Compra en Petals by Montse";
-
-if (!$user_id) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: ../user_login.php');
     exit;
 }
 
-// Crear conexión con Pagadito
-$curl = curl_init();
-curl_setopt_array($curl, [
-    CURLOPT_URL => PAGADITO_API_URL . "/apiv3/rs/transaction",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => http_build_query([
-        "uid" => PAGADITO_UID,
-        "wsk" => PAGADITO_WSK,
-        "amount" => $total,
-        "currency" => "USD",
-        "reference" => uniqid("ORDER_"),
-        "description" => $detalle,
-        "url" => PAGADITO_RETURN_URL,
-        "cancel_url" => PAGADITO_CANCEL_URL
-    ])
-]);
+$total = floatval($_POST['total'] ?? 0.00);
+$detalle = "Compra en Petals by Montse";
+$reference = uniqid("ORDER_");
 
-$response = curl_exec($curl);
-$error = curl_error($curl);
-curl_close($curl);
+// 1️⃣ Inicializar SDK
+$Pagadito = new Pagadito(PAGADITO_UID, PAGADITO_WSK);
+$Pagadito->change_format_json();
+$Pagadito->change_currency_usd();
+if (PAGADITO_ENV === 'sandbox') $Pagadito->mode_sandbox_on();
 
-//  Procesar respuesta
-if ($error) {
-    die("❌ Error de conexión con Pagadito: $error");
+// 2️⃣ Conectar
+if (!$Pagadito->connect()) {
+    die("❌ Error al conectar con Pagadito: " . $Pagadito->get_rs_message());
 }
 
-$data = json_decode($response, true);
+// 3️⃣ Agregar detalle
+$Pagadito->add_detail(1, $detalle, $total);
 
-if (isset($data['code']) && $data['code'] == 'PG1001') {
-    // Transacción generada correctamente
-    $redirect_url = $data['value']['url'];
-    header("Location: $redirect_url");
-    exit;
-} else {
-    echo "<h3>❌ Error al generar transacción:</h3><pre>";
-    print_r($data);
-    echo "</pre>";
+// 4️⃣ Ejecutar transacción (redirige automáticamente)
+if (!$Pagadito->exec_trans($reference)) {
+    die("❌ Error al ejecutar transacción: " . $Pagadito->get_rs_message());
 }
 ?>
