@@ -5,9 +5,12 @@ FROM php:8.2-cli
 RUN echo "Acquire::ForceIPv4 \"true\";" > /etc/apt/apt.conf.d/99force-ipv4 && \
     echo "Acquire::http::Proxy \"false\";" > /etc/apt/apt.conf.d/99disable-proxy
 
-# Instalar dependencias del sistema necesarias para Composer y extensiones
-RUN apt-get update && apt-get install -y git unzip libzip-dev && \
-    docker-php-ext-install pdo pdo_mysql zip
+# ✅ Instalar dependencias necesarias para Composer, extensiones y cURL (Pagadito)
+RUN apt-get update && apt-get install -y \
+    git unzip libzip-dev \
+    libcurl4-openssl-dev ca-certificates \
+ && docker-php-ext-install pdo pdo_mysql zip curl \
+ && update-ca-certificates
 
 # Copiar Composer desde la imagen oficial
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
