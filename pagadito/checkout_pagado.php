@@ -1,7 +1,10 @@
 <?php
 require_once 'pagadito_config.php';
 include '../components/connect.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 // Simulación: datos de pedido desde tu carrito (ajusta según tus tablas)
 $user_id = $_SESSION['user_id'] ?? 0;
