@@ -12,7 +12,7 @@ if (!PAGADITO_UID || !PAGADITO_WSK) {
 }
 
 // Entorno (sandbox o production)
-define('PAGADITO_ENV', getenv('PAGADITO_ENV') ?: 'production');
+define('PAGADITO_ENV', getenv('PAGADITO_ENV') ?: 'sandbox');
 
 // URL base del SDK (no usar pagadi.to)
 if (PAGADITO_ENV === 'production') {
