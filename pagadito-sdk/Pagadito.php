@@ -196,24 +196,33 @@ class Pagadito {
     }
 
     private function call($params){
-        try {
-            $ch = curl_init($this->sandbox_mode ? $this->apipg_sandbox : $this->apipg);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->format_post_vars($params));
-            $response = curl_exec($ch);
+    try{
+        $ch = curl_init($this->sandbox_mode ? $this->apipg_sandbox : $this->apipg);
 
-            if (curl_errno($ch)) {
-                throw new Exception("Error de conexión cURL: " . curl_error($ch));
-            }
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->format_post_vars($params));
 
-            curl_close($ch);
-            return $this->decode_response($response);
-        } catch (Exception $err) {
-            error_log("[Pagadito SDK] Error: " . $err->getMessage());
-            return null;
+        // Seguridad estricta para producción (y funciona igual en prod):
+        curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        curl_setopt($ch, CURLOPT_CAINFO, "/etc/ssl/certs/ca-certificates.crt");
+        curl_setopt($ch, CURLOPT_CAPATH, "/etc/ssl/certs");
+
+        $response = curl_exec($ch);
+        if ($response === false) {
+            // Deja registro útil en logs PHP/Render
+            error_log('[Pagadito cURL] ' . curl_error($ch));
         }
+        curl_close($ch);
+
+        return $this->decode_response($response);
+    } catch (Exception $err) {
+        error_log('[Pagadito Exception] ' . $err->getMessage());
+        return null;
     }
+}
+
+
 
     private function format_post_vars($vars){
         $formatted = "";

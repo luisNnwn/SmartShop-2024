@@ -1,41 +1,32 @@
 <?php
-require_once '../components/connect.php';
-require_once '../pagadito-sdk/Pagadito.php';
-require_once 'pagadito_config.php';
+require_once __DIR__ . '/pagadito_config.php';
+require_once __DIR__ . '/../pagadito-sdk/Pagadito.php';
+require_once __DIR__ . '/../components/connect.php';
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-if (session_status() === PHP_SESSION_NONE) session_start();
+// token_trans viene por GET (según manual)
+$token_trans = $_GET['token'] ?? '';
+if (!$token_trans) { die('Falta token de transacción.'); }
 
-echo "<h2>🔄 Validando pago...</h2>";
+$pg = new Pagadito(PAGADITO_UID, PAGADITO_WSK);
+$pg->change_currency_usd();
 
-$Pagadito = new Pagadito(PAGADITO_UID, PAGADITO_WSK);
-$Pagadito->change_format_json();
-$Pagadito->change_currency_usd();
-if (PAGADITO_ENV === 'sandbox') $Pagadito->mode_sandbox_on();
+if (!$pg->connect()) {
+    die('❌ Conexión Pagadito falló en retorno: ' . $pg->get_rs_message());
+}
 
-if ($Pagadito->connect()) {
-    $token = $_GET['token'] ?? '';
+if ($pg->get_status($token_trans)) {
+    // PG1003 → respuesta OK, revisa status
+    $status = $pg->get_rs_status();   // e.g. "COMPLETED"
+    $ref    = $pg->get_rs_reference();
+    $fecha  = $pg->get_rs_date_trans();
 
-    if ($token && $Pagadito->get_status($token)) {
-        $estado = $Pagadito->get_rs_status();
-
-        if ($estado === 'COMPLETED') {
-            // ✅ Actualizar el pedido en tu base de datos
-            $user_id = $_SESSION['user_id'] ?? 0;
-            $update = $conn->prepare("UPDATE orders SET payment_status = 'Pagado' WHERE user_id = ?");
-            $update->execute([$user_id]);
-
-            echo "<h2>✅ Pago completado correctamente</h2>";
-            echo "<p>Gracias por tu compra. Tu pago ha sido confirmado y registrado.</p>";
-        } else {
-            echo "<h2>⚠️ Pago no completado</h2>";
-            echo "<p>Estado actual: $estado</p>";
-        }
+    if ($status === 'COMPLETED') {
+        // Marca orden pagada en tu BD (usa $ref/$token_trans/$user_id)
+        echo "<h2>✅ Pago confirmado</h2><p>Ref: $ref • Fecha: $fecha</p>";
     } else {
-        echo "<h2>❌ No se pudo verificar el pago</h2>";
-        echo "<p>" . $Pagadito->get_rs_message() . "</p>";
+        echo "<h3>Estado: $status</h3>";
     }
 } else {
-    echo "<h2>❌ Error de conexión con Pagadito</h2>";
-    echo "<p>" . $Pagadito->get_rs_message() . "</p>";
+    die('❌ No se pudo consultar estado: ' . $pg->get_rs_message());
 }
-?>
