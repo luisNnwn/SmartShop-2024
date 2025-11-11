@@ -109,13 +109,11 @@ if(isset($_POST['update_qty'])){
    <a href="cart.php?delete_all" class="delete-btn <?= ($grand_total > 1)?'':'disabled'; ?>"
       onclick="return confirm('¿Vaciar todo el carrito?');">🗑 Vaciar carrito</a>
 
-   <form action="pagadito/checkout_pagado.php" method="POST" style="display:inline;">
-      <input type="hidden" name="total" value="<?= $grand_total; ?>">
-      <button type="submit" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>" 
-              <?= ($grand_total > 1)?'':'disabled'; ?>>
-         💳 Proceder al pago
-      </button>
+   <form action="/paypal/checkout_paypal.php" method="post">
+      <input type="hidden" name="total" value="<?= htmlspecialchars($total_general) ?>">
+      <button type="submit" class="btn">Proceder al pago</button>
    </form>
+
 </div>
 
    </div>
