@@ -16,15 +16,18 @@ if(!$admin_id){
 // AGREGAR PRODUCTO
 // ===========================
 if(isset($_POST['add_product'])){
-   $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-   $price = filter_var($_POST['price'], FILTER_SANITIZE_STRING);
-   $details = filter_var($_POST['details'], FILTER_SANITIZE_STRING);
 
+   // Sanitización moderna
+   $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
+   $price = floatval($_POST['price']);
+   $details = htmlspecialchars(trim($_POST['details']), ENT_QUOTES, 'UTF-8');
+
+   // Manejo de imágenes
    $images = [];
    for ($i = 1; $i <= 3; $i++) {
-      $img_name = $_FILES["image_0$i"]['name'];
-      $img_name = filter_var($img_name, FILTER_SANITIZE_STRING);
-      $img_tmp = $_FILES["image_0$i"]['tmp_name'];
+
+      $img_name = trim($_FILES["image_0$i"]['name']);
+      $img_tmp  = $_FILES["image_0$i"]['tmp_name'];
       $img_size = $_FILES["image_0$i"]['size'];
 
       if($img_size > 2000000){
@@ -32,16 +35,21 @@ if(isset($_POST['add_product'])){
          $images[] = '';
       } else {
          if (!empty($img_name)) {
+
+            // limpiar nombre de archivo
+            $img_name = preg_replace("/[^A-Za-z0-9._-]/", "_", $img_name);
+
             $folder = '../uploaded_img/'.$img_name;
             move_uploaded_file($img_tmp, $folder);
             $images[] = $img_name;
+
          } else {
             $images[] = '';
          }
       }
    }
 
-   // validar producto duplicado
+   // Verificar duplicados
    $select_products = $conn->prepare("SELECT * FROM `products` WHERE name = ?");
    $select_products->execute([$name]);
 
@@ -49,21 +57,22 @@ if(isset($_POST['add_product'])){
       $message[] = '¡El nombre del producto ya existe!';
    } else {
 
-      // insertar producto
+      // Insertar
       $insert_products = $conn->prepare("
          INSERT INTO `products`(name, details, price, image_01, image_02, image_03)
          VALUES(?,?,?,?,?,?)
       ");
+
       $insert_products->execute([
-         $name, 
-         $details, 
-         $price, 
-         $images[0] ?? '', 
-         $images[1] ?? '', 
+         $name,
+         $details,
+         $price,
+         $images[0] ?? '',
+         $images[1] ?? '',
          $images[2] ?? ''
       ]);
 
-      // 🚀 EVITAR DUPLICADOS AL REFRESCAR LA PÁGINA
+      // 🚀 EVITA DUPLICADOS: limpiar POST → GET
       header("Location: products.php?added=1");
       exit;
    }
