@@ -1,6 +1,6 @@
 <?php
 // ================================
-// index.php - Petals by Montse (rebranding visual)
+// index.php - Petals by Montse
 // ================================
 
 // Conexión a la base de datos
@@ -12,14 +12,15 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Capturar el ID de usuario si está logueado
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-} else {
-    $user_id = '';
-}
+$user_id = $_SESSION['user_id'] ?? '';
 
 // Incluir lógica de wishlist y carrito
 include 'components/wishlist_cart.php';
+
+// Contar número total de productos para el slider inteligente
+$count_products_stmt = $conn->prepare("SELECT COUNT(*) FROM `products`");
+$count_products_stmt->execute();
+$total_products = $count_products_stmt->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -29,15 +30,12 @@ include 'components/wishlist_cart.php';
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   <!-- 🔹 CAMBIO 1: nuevo título -->
    <title>Petals by Montse</title>
 
-   <!-- Estilos externos -->
    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="css/style.css">
 
-   <!-- 🔹 CAMBIO 2: favicon opcional -->
    <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 
@@ -53,7 +51,6 @@ include 'components/wishlist_cart.php';
    <div class="swiper home-slider">
       <div class="swiper-wrapper">
 
-         <!-- 🔹 CAMBIO 3: textos y temática floral -->
          <div class="swiper-slide slide">
             <div class="image">
                <img src="images/home-img-1.png" alt="Ramo de rosas rojas">
@@ -98,13 +95,11 @@ include 'components/wishlist_cart.php';
 =========================== -->
 <section class="category">
 
-   <!-- 🔹 CAMBIO 4: texto de sección -->
    <h1 class="heading">Compra por ocasión</h1>
 
    <div class="swiper category-slider">
       <div class="swiper-wrapper">
 
-         <!-- 🔹 CAMBIO 5: categorías florales (manteniendo enlaces y estructura original) -->
          <a href="category.php?category=rosas" class="swiper-slide slide">
             <img src="images/icon-1.png" alt="Rosas">
             <h3>Rosas</h3>
@@ -145,43 +140,45 @@ include 'components/wishlist_cart.php';
 =========================== -->
 <section class="home-products">
 
-   <!-- 🔹 CAMBIO 6: título temático -->
    <h1 class="heading">Nuevos arreglos florales</h1>
 
    <div class="swiper products-slider">
       <div class="swiper-wrapper">
 
       <?php
-         // 🔹 CAMBIO 7: aún usamos 'products' (no 'flowers' todavía)
-         $select_products = $conn->prepare("SELECT * FROM `products` LIMIT 6"); 
+         $select_products = $conn->prepare("SELECT * FROM `products` LIMIT 6");
          $select_products->execute();
-         if($select_products->rowCount() > 0){
-            while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+
+         if ($select_products->rowCount() > 0) {
+            while ($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)) {
       ?>
       <form action="" method="post" class="swiper-slide slide">
          <input type="hidden" name="pid" value="<?= $fetch_product['id']; ?>">
          <input type="hidden" name="name" value="<?= $fetch_product['name']; ?>">
          <input type="hidden" name="price" value="<?= $fetch_product['price']; ?>">
          <input type="hidden" name="image" value="<?= $fetch_product['image_01']; ?>">
-         
+
          <button class="fas fa-heart" type="submit" name="add_to_wishlist"></button>
          <a href="quick_view.php?pid=<?= $fetch_product['id']; ?>" class="fas fa-eye"></a>
          <img src="uploaded_img/<?= $fetch_product['image_01']; ?>" alt="">
-         
+
          <div class="name"><?= $fetch_product['name']; ?></div>
+
          <div class="flex">
             <div class="price"><span>$</span><?= $fetch_product['price']; ?><span> USD</span></div>
-            <input type="number" name="qty" class="qty" min="1" max="99" 
+            <input type="number" name="qty" class="qty" min="1" max="99"
              onkeypress="if(this.value.length == 2) return false;" value="1">
          </div>
+
          <input type="submit" value="Añadir al carrito" class="btn" name="add_to_cart">
       </form>
       <?php
             }
-         }else{
+         } else {
             echo '<p class="empty">Aún no se han añadido arreglos florales.</p>';
          }
       ?>
+
       </div>
       <div class="swiper-pagination"></div>
    </div>
@@ -194,22 +191,18 @@ include 'components/wishlist_cart.php';
 <script src="js/script.js"></script>
 
 <script>
-   var swiper = new Swiper(".home-slider", {
+   // HOME SLIDER
+   new Swiper(".home-slider", {
       loop: true,
       spaceBetween: 20,
-      pagination: {
-         el: ".swiper-pagination",
-         clickable: true,
-      },
+      pagination: { el: ".swiper-pagination", clickable: true },
    });
 
-   var swiper = new Swiper(".category-slider", {
+   // CATEGORY SLIDER
+   new Swiper(".category-slider", {
       loop: true,
       spaceBetween: 20,
-      pagination: {
-         el: ".swiper-pagination",
-         clickable: true,
-      },
+      pagination: { el: ".swiper-pagination", clickable: true },
       breakpoints: {
          0: { slidesPerView: 2 },
          650: { slidesPerView: 3 },
@@ -218,13 +211,11 @@ include 'components/wishlist_cart.php';
       },
    });
 
-   var swiper = new Swiper(".products-slider", {
-      loop: true,
+   // PRODUCTS SLIDER INTELIGENTE
+   new Swiper(".products-slider", {
+      loop: <?= ($total_products >= 3 ? 'true' : 'false'); ?>,
       spaceBetween: 20,
-      pagination: {
-         el: ".swiper-pagination",
-         clickable: true,
-      },
+      pagination: { el: ".swiper-pagination", clickable: true },
       breakpoints: {
          550: { slidesPerView: 2 },
          768: { slidesPerView: 2 },
