@@ -1,6 +1,9 @@
 <?php
 include '../components/connect.php';
-session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $admin_id = $_SESSION['admin_id'] ?? null;
 
@@ -50,7 +53,7 @@ if(isset($_POST['add_product'])){
 
 // ✅ Eliminar producto
 if(isset($_GET['delete'])){
-   $delete_id = $_GET['delete'];
+   $delete_id = filter_var($_GET['delete'], FILTER_SANITIZE_NUMBER_INT);
 
    // Borrar imágenes asociadas
    $delete_product_image = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
@@ -72,99 +75,3 @@ if(isset($_GET['delete'])){
    exit;
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Gestión de Productos | Petals by Montse</title>
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-   <link rel="stylesheet" href="../css/admin_style.css">
-</head>
-<body>
-
-<?php include '../components/admin_header.php'; ?>
-
-<section class="add-products">
-
-   <h1 class="heading">Agregar nuevo producto</h1>
-
-   <form action="" method="post" enctype="multipart/form-data">
-      <div class="flex">
-
-         <div class="inputBox">
-            <span>Nombre del producto:</span>
-            <input type="text" name="name" class="box" required maxlength="100" placeholder="Ej: Rosa encantada en vidrio">
-         </div>
-
-         <div class="inputBox">
-            <span>Precio del producto:</span>
-            <input type="number" name="price" min="0" max="999999" class="box" required placeholder="Ej: 29.99">
-         </div>
-
-         <div class="inputBox">
-            <span>Imagen principal:</span>
-            <input type="file" name="image_01" accept="image/*" class="box" required>
-         </div>
-
-         <div class="inputBox">
-            <span>Imagen secundaria:</span>
-            <input type="file" name="image_02" accept="image/*" class="box">
-         </div>
-
-         <div class="inputBox">
-            <span>Imagen adicional:</span>
-            <input type="file" name="image_03" accept="image/*" class="box">
-         </div>
-
-         <div class="inputBox" style="flex-basis:100%;">
-            <span>Descripción del producto:</span>
-            <textarea name="details" class="box" maxlength="500" required placeholder="Escriba una descripción breve del producto..." rows="5"></textarea>
-         </div>
-
-      </div>
-      <input type="submit" value="Añadir producto" class="btn" name="add_product">
-   </form>
-</section>
-
-<section class="show-products">
-   <h1 class="heading">Productos en catálogo</h1>
-   <div class="box-container">
-
-   <?php
-      $select_products = $conn->prepare("SELECT * FROM `products` ORDER BY id DESC");
-      $select_products->execute();
-
-      if($select_products->rowCount() > 0){
-         while($fetch_products = $select_products->fetch(PDO::FETCH_ASSOC)){ 
-   ?>
-   <div class="box">
-      <img src="../uploaded_img/<?= htmlspecialchars($fetch_products['image_01']); ?>" alt="Imagen del producto">
-      <h3 class="name"><?= htmlspecialchars($fetch_products['name']); ?></h3>
-      <p class="price">$<?= number_format($fetch_products['price'], 2); ?></p>
-      <p class="details"><?= htmlspecialchars($fetch_products['details']); ?></p>
-
-      <div class="flex-btn">
-         <a href="update_product.php?update=<?= $fetch_products['id']; ?>" class="option-btn">Editar</a>
-         <a href="products.php?delete=<?= $fetch_products['id']; ?>" 
-            class="delete-btn" 
-            onclick="return confirm('¿Deseas eliminar este producto y sus imágenes asociadas?');">
-            Eliminar
-         </a>
-      </div>
-   </div>
-   <?php
-         }
-      }else{
-         echo '<p class="empty">Aún no hay productos registrados.</p>';
-      }
-   ?>
-   </div>
-</section>
-
-<script src="../js/admin_script.js"></script>
-</body>
-</html>

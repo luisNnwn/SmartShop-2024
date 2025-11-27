@@ -3,17 +3,6 @@
 // Encabezado del Panel Admin
 // Petals by Montse 🌸
 // ==========================
-
-// Mostrar mensajes globales
-if (isset($message) && is_array($message)) {
-   foreach ($message as $msg) {
-      echo '
-      <div class="message">
-         <span>' . htmlspecialchars($msg) . '</span>
-         <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-      </div>';
-   }
-}
 ?>
 
 <header class="header">
@@ -72,3 +61,19 @@ if (isset($message) && is_array($message)) {
    </section>
 
 </header>
+
+<?php
+// ==========================
+// MENSAJES DESPUÉS DEL HEADER 🔥
+// ==========================
+
+if (isset($message) && is_array($message)) {
+   foreach ($message as $msg) {
+      echo '
+      <div class="message">
+         <span>' . htmlspecialchars($msg) . '</span>
+         <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+      </div>';
+   }
+}
+?>
