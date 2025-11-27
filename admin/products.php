@@ -29,8 +29,9 @@ if(isset($_POST['add_product'])){
 
       if($img_size > 2000000){
          $message[] = "La imagen $i supera el tamaño permitido (2 MB)";
+         $images[] = '';
       } else {
-         if ($img_name) {
+         if (!empty($img_name)) {
             $folder = '../uploaded_img/'.$img_name;
             move_uploaded_file($img_tmp, $folder);
             $images[] = $img_name;
@@ -40,18 +41,31 @@ if(isset($_POST['add_product'])){
       }
    }
 
+   // validar producto duplicado
    $select_products = $conn->prepare("SELECT * FROM `products` WHERE name = ?");
    $select_products->execute([$name]);
 
    if($select_products->rowCount() > 0){
       $message[] = '¡El nombre del producto ya existe!';
    } else {
+
+      // insertar producto
       $insert_products = $conn->prepare("
          INSERT INTO `products`(name, details, price, image_01, image_02, image_03)
          VALUES(?,?,?,?,?,?)
       ");
-      $insert_products->execute([$name, $details, $price, $images[0], $images[1], $images[2]]);
-      $message[] = '¡Nuevo producto añadido correctamente!';
+      $insert_products->execute([
+         $name, 
+         $details, 
+         $price, 
+         $images[0] ?? '', 
+         $images[1] ?? '', 
+         $images[2] ?? ''
+      ]);
+
+      // 🚀 EVITAR DUPLICADOS AL REFRESCAR LA PÁGINA
+      header("Location: products.php?added=1");
+      exit;
    }
 }
 
@@ -75,7 +89,7 @@ if(isset($_GET['delete'])){
    $conn->prepare("DELETE FROM `cart` WHERE pid = ?")->execute([$delete_id]);
    $conn->prepare("DELETE FROM `wishlist` WHERE pid = ?")->execute([$delete_id]);
 
-   header('location:products.php');
+   header('location:products.php?deleted=1');
    exit;
 }
 ?>
