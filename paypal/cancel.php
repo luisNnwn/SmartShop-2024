@@ -8,20 +8,58 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 <title>Pago Cancelado | Petals by Montse</title>
 <link rel="stylesheet" href="../css/style.css">
 <style>
-body { text-align:center; padding:4rem; background:#fff3f6; font-family:'Poppins',sans-serif; }
-h2 { color:#d0486a; font-size:2.4rem; }
-p { font-size:1.2rem; color:#555; margin-bottom:2rem; }
-.btn {
-   background:#d0486a; color:white; padding:10px 25px; border:none;
-   border-radius:6px; font-size:1rem; cursor:pointer; text-decoration:none;
-   transition:0.2s ease-in-out;
+.paypal-container{
+   max-width:520px;
+   margin:4rem auto;
+   background:#fff;
+   border:1px solid rgba(211,108,140,.25);
+   border-radius:12px;
+   padding:3rem 2rem;
+   text-align:center;
+   box-shadow:0 8px 20px rgba(211,108,140,.12);
+   background:#fff6f8;
 }
-.btn:hover { background:#b33a57; }
+
+.paypal-container h2{
+   font-size:2.6rem;
+   color:#d0486a;
+   margin-bottom:1rem;
+}
+
+.paypal-container p{
+   font-size:1.6rem;
+   color:#555;
+   margin-bottom:1.4rem;
+}
+
+.paypal-btn{
+   display:inline-block;
+   padding:1.2rem 2rem;
+   margin-top:1.2rem;
+   background:#d0486a;
+   color:#fff;
+   border-radius:8px;
+   font-size:1.7rem;
+   transition:0.2s;
+}
+
+.paypal-btn:hover{
+   background:#b33a57;
+}
+
+@media(max-width:480px){
+   .paypal-container{ margin:2rem 1rem; padding:2.4rem 1.6rem; }
+   .paypal-container h2{ font-size:2.3rem; }
+}
 </style>
 </head>
 <body>
-    <h2>❌ Pago Cancelado</h2>
-    <p>Tu transacción fue cancelada. No se ha realizado ningún cargo.</p>
-    <a href="../cart.php" class="btn">Volver al carrito</a>
+
+<div class="paypal-container">
+   <h2>❌ Pago cancelado</h2>
+   <p>No se realizó ningún cargo. Puedes intentarlo nuevamente cuando gustes.</p>
+   <a href="../cart.php" class="paypal-btn">Volver al carrito</a>
+</div>
+
 </body>
 </html>

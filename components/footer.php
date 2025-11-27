@@ -23,19 +23,16 @@
       <!-- 🔹 CAMBIO 3: Información de contacto -->
       <div class="box">
          <h3>Contáctanos</h3>
-         <a href="tel:+50378164658"><i class="fas fa-phone"></i> +503 7816-4658</a>
-         <a href="tel:+50361257890"><i class="fas fa-phone"></i> +503 6125-7890</a>
+         <a href="tel:+50364527496"><i class="fas fa-phone"></i> +503 6452-7496</a>
          <a href="mailto:petalsbymontse@gmail.com"><i class="fas fa-envelope"></i> petalsbymontse@gmail.com</a>
-         <a href="https://maps.app.goo.gl/" target="_blank"><i class="fas fa-map-marker-alt"></i> San Salvador, El Salvador</a>
+         <a href="https://share.google/B9bgFQ6moE6Wsug9C" target="_blank"><i class="fas fa-map-marker-alt"></i> San Salvador, El Salvador</a>
       </div>
 
       <!-- 🔹 CAMBIO 4: Redes sociales -->
       <div class="box">
          <h3>Síguenos</h3>
-         <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
-         <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-         <a href="https://www.tiktok.com/" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
-         <a href="https://wa.me/50378164658" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+         <a href="https://www.facebook.com/PetalsByMontse/" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+         <a href="https://wa.me/50364527496" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
       </div>
 
    </section>

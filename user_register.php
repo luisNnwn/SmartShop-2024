@@ -1,8 +1,4 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'vendor/autoload.php';
 include 'components/connect.php';
 
 // Aseguramos la sesión
@@ -14,7 +10,7 @@ $user_id = $_SESSION['user_id'] ?? '';
 
 if (isset($_POST['submit'])) {
 
-   // ✅ Sanitización moderna y segura
+   // Sanitización moderna y segura
    $name  = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
 
@@ -31,43 +27,20 @@ if (isset($_POST['submit'])) {
       if ($pass !== $cpass) {
          $message[] = '💐 Las contraseñas no coinciden.';
       } else {
+
          // Insertar usuario
          $insert_user = $conn->prepare("INSERT INTO `users`(name, email, password) VALUES(?,?,?)");
          $insert_user->execute([$name, $email, $cpass]);
+
+         // Mensaje estándar sin retrasos
          $message[] = '✨ Registro exitoso. Bienvenida a Petals by Montse 🌷';
 
-         // Enviar correo de bienvenida con PHPMailer
-         $mail = new PHPMailer(true);
-         try {
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'smartshopsv24@gmail.com';
-            $mail->Password   = 'sehp qjua zmln xibs';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;
-
-            $mail->setFrom('smartshopsv24@gmail.com', 'Petals by Montse');
-            $mail->addAddress($email, $name);
-            $mail->isHTML(true);
-            $mail->Subject = '🌸 ¡Bienvenida a Petals by Montse!';
-            $mail->Body = '
-               <html>
-               <head><title>Bienvenida a Petals by Montse</title></head>
-               <body style="font-family:Arial, sans-serif; background-color:#fffafc; padding:20px;">
-                  <div style="max-width:600px; margin:auto; border-radius:8px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.1); padding:20px;">
-                     <h2 style="color:#b14f76;">🌷 ¡Hola, '.htmlspecialchars($name, ENT_QUOTES, 'UTF-8').'!</h2>
-                     <p>Gracias por unirte a <strong>Petals by Montse</strong>. A partir de hoy, podrás descubrir nuestros arreglos florales, ofertas y detalles pensados para cada momento especial.</p>
-                     <p>🌼 Tu registro se ha completado correctamente. ¡Prepárate para llenar tus días de color y aroma!</p>
-                     <hr style="border:none; border-top:1px solid #eee;">
-                     <p style="color:#888; font-size:0.9rem;">Este correo fue enviado automáticamente por Petals by Montse.</p>
-                  </div>
-               </body>
-               </html>';
-            $mail->send();
-         } catch (Exception $e) {
-            $message[] = "⚠️ No se pudo enviar el correo de bienvenida.";
-         }
+         // --------------------------------------------------------------------
+         // 🚫 PHPMailer está DESACTIVADO
+         // En vez de enviar un correo, simulamos éxito inmediato
+         // --------------------------------------------------------------------
+         // $mail_enviado = true;  // Si algún día querés reactivarlo
+         // --------------------------------------------------------------------
       }
    }
 }
